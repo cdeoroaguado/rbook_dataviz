@@ -56,3 +56,8 @@ fig:fig-2
 fig:fig-3
 fig:fig-4
 importación-de-datos-1
+importación-de-archivos-txt-delimitados-por-tabulación-con-read.table
+importación-de-archivos-csv-con-read.csv
+uso-de-readr-de-tidyverse
+section
+ejemplos-esenciales
