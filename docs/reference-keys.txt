@@ -61,3 +61,11 @@ importación-de-archivos-csv-con-read.csv
 uso-de-readr-de-tidyverse
 section
 ejemplos-esenciales
+etltidyverse
+transformación-de-datos
+operador
+filtrar-datos-para-crear-un-subconjunto
+acotar-la-lista-de-columnas-con-select
+organizar-las-filas
+añadir-columnas-con-mutate
+agrupación-y-resumen-de-los-datos
