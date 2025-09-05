@@ -23,7 +23,7 @@
 <meta name="author" content="Carlos de Oro Aguado" />
 
 
-<meta name="date" content="2025-08-19" />
+<meta name="date" content="2025-09-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="tidyverse.html"/>
+<link rel="next" href="etltidyverse.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -188,25 +188,61 @@ div.csl-indent {
 <li class="chapter" data-level="1.3.1" data-path="01-intro.html"><a href="#video-paso-a-paso-de-la-publicaci%C3%B3n-del-libro-en-github-pages"><i class="fa fa-check"></i><b>1.3.1</b> Video paso a paso de la publicación del libro en GitHub Pages</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="tidyverse.html"><a href="tidyverse.html"><i class="fa fa-check"></i><b>2</b> Tidyverse</a>
+<li class="chapter" data-level="2" data-path="etltidyverse.html"><a href="etltidyverse.html"><i class="fa fa-check"></i><b>2</b> ETL con Tidyverse</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="tidyverse.html"><a href="tidyverse.html#data-frames"><i class="fa fa-check"></i><b>2.1</b> Data Frames</a></li>
+<li class="chapter" data-level="2.1" data-path="etltidyverse.html"><a href="etltidyverse.html#data-frames"><i class="fa fa-check"></i><b>2.1</b> Data Frames</a></li>
 <li class="chapter" data-level="2.2" data-path="01-intro.html"><a href="#importaci%C3%B3n-de-datos"><i class="fa fa-check"></i><b>2.2</b> Importación de datos</a>
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="01-intro.html"><a href="#importaci%C3%B3n-de-archivos-csv-con-read.table"><i class="fa fa-check"></i><b>2.2.1</b> Importación de archivos <code>csv</code> con <code>read.table()</code></a></li>
+<li class="chapter" data-level="2.2.2" data-path="01-intro.html"><a href="#importaci%C3%B3n-de-archivos-txt-delimitados-por-tabulaci%C3%B3n-con-read.table"><i class="fa fa-check"></i><b>2.2.2</b> Importación de archivos <code>txt</code> delimitados por tabulación con <code>read.table()</code></a></li>
+<li class="chapter" data-level="2.2.3" data-path="01-intro.html"><a href="#importaci%C3%B3n-de-archivos-csv-con-read.csv"><i class="fa fa-check"></i><b>2.2.3</b> Importación de archivos <code>csv</code> con <code>read.csv()</code></a></li>
+<li class="chapter" data-level="2.2.4" data-path="etltidyverse.html"><a href="etltidyverse.html#uso-de-readr-de-tidyverse"><i class="fa fa-check"></i><b>2.2.4</b> Uso de <code>readr</code> de tidyverse</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="tidyverse.html"><a href="tidyverse.html#el-paquete-dplyr"><i class="fa fa-check"></i><b>2.3</b> El paquete <code>dplyr</code></a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a>
+<li class="chapter" data-level="2.3" data-path="01-intro.html"><a href="#transformaci%C3%B3n-de-datos"><i class="fa fa-check"></i><b>2.3</b> Transformación de datos</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>3.1</b> math example</a></li>
+<li class="chapter" data-level="2.3.1" data-path="etltidyverse.html"><a href="etltidyverse.html#el-paquete-dplyr"><i class="fa fa-check"></i><b>2.3.1</b> El paquete <code>dplyr</code></a></li>
+<li class="chapter" data-level="2.3.2" data-path="etltidyverse.html"><a href="etltidyverse.html#operador"><i class="fa fa-check"></i><b>2.3.2</b> Operador <code>%&gt;%</code></a></li>
+<li class="chapter" data-level="2.3.3" data-path="etltidyverse.html"><a href="etltidyverse.html#filtrar-datos-para-crear-un-subconjunto"><i class="fa fa-check"></i><b>2.3.3</b> Filtrar datos para crear un subconjunto</a></li>
+<li class="chapter" data-level="2.3.4" data-path="etltidyverse.html"><a href="etltidyverse.html#acotar-la-lista-de-columnas-con-select"><i class="fa fa-check"></i><b>2.3.4</b> Acotar la lista de columnas con <code>select()</code></a></li>
+<li class="chapter" data-level="2.3.5" data-path="etltidyverse.html"><a href="etltidyverse.html#organizar-las-filas"><i class="fa fa-check"></i><b>2.3.5</b> Organizar las filas</a></li>
+<li class="chapter" data-level="2.3.6" data-path="01-intro.html"><a href="#a%C3%B1adir-columnas-con-mutate"><i class="fa fa-check"></i><b>2.3.6</b> Añadir columnas con <code>mutate</code></a></li>
+<li class="chapter" data-level="2.3.7" data-path="01-intro.html"><a href="#agrupaci%C3%B3n-y-resumen-de-los-datos"><i class="fa fa-check"></i><b>2.3.7</b> Agrupación y resumen de los datos</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>4</b> Applications</a>
+<li class="chapter" data-level="2.4" data-path="01-intro.html"><a href="#ordenaci%C3%B3n-de-datos"><i class="fa fa-check"></i><b>2.4</b> Ordenación de datos</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>4.1</b> Example one</a></li>
-<li class="chapter" data-level="4.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>4.2</b> Example two</a></li>
+<li class="chapter" data-level="2.4.1" data-path="01-intro.html"><a href="#recopilaci%C3%B3n"><i class="fa fa-check"></i><b>2.4.1</b> Recopilación</a></li>
+<li class="chapter" data-level="2.4.2" data-path="01-intro.html"><a href="#distribuci%C3%B3n"><i class="fa fa-check"></i><b>2.4.2</b> Distribución</a></li>
+<li class="chapter" data-level="2.4.3" data-path="01-intro.html"><a href="#separaci%C3%B3n"><i class="fa fa-check"></i><b>2.4.3</b> Separación</a></li>
+<li class="chapter" data-level="2.4.4" data-path="01-intro.html"><a href="#uni%C3%B3n"><i class="fa fa-check"></i><b>2.4.4</b> Unión</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>5</b> Final Words</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="vizestatico.html"><a href="vizestatico.html"><i class="fa fa-check"></i><b>3</b> Exploración y visualización estática de datos</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-variables-categ%C3%B3ricas-con-gr%C3%A1ficos-de-barras"><i class="fa fa-check"></i><b>3.1</b> Visualización de variables categóricas con gráficos de barras</a></li>
+<li class="chapter" data-level="3.2" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-variable-continua-con-un-histograma"><i class="fa fa-check"></i><b>3.2</b> Visualización de variable continua con un histograma</a></li>
+<li class="chapter" data-level="3.3" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-la-covariaci%C3%B3n-con-gr%C3%A1ficos-de-caja"><i class="fa fa-check"></i><b>3.3</b> Visualización de la covariación con gráficos de caja</a></li>
+<li class="chapter" data-level="3.4" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-la-covariaci%C3%B3n-con-el-gr%C3%A1fico-de-burbuja"><i class="fa fa-check"></i><b>3.4</b> Visualización de la covariación con el gráfico de burbuja</a></li>
+<li class="chapter" data-level="3.5" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-2d-de-contenedores-y-hex%C3%A1gonos"><i class="fa fa-check"></i><b>3.5</b> Visualización 2D de contenedores y hexágonos</a></li>
+<li class="chapter" data-level="3.6" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-estad%C3%ADsticas-resumen-de-los-datos"><i class="fa fa-check"></i><b>3.6</b> Visualización de estadísticas ( resumen de los datos)</a></li>
+<li class="chapter" data-level="3.7" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-un-gr%C3%A1fico-de-correlaci%C3%B3n"><i class="fa fa-check"></i><b>3.7</b> Visualización de un gráfico de correlación</a></li>
+<li class="chapter" data-level="3.8" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-un-gr%C3%A1fico-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>3.8</b> Visualización de un gráfico de dispersión</a></li>
+<li class="chapter" data-level="3.9" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-del-gr%C3%A1fico-de-dispersi%C3%B3n-con-linea-de-tendencia"><i class="fa fa-check"></i><b>3.9</b> Visualización del gráfico de dispersión con linea de tendencia</a></li>
+<li class="chapter" data-level="3.10" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-trazado-de-categor%C3%ADas"><i class="fa fa-check"></i><b>3.10</b> Visualización de trazado de categorías</a></li>
+<li class="chapter" data-level="3.11" data-path="vizestatico.html"><a href="vizestatico.html#visualizacion-etiquetando-nombres"><i class="fa fa-check"></i><b>3.11</b> Visualizacion etiquetando nombres</a></li>
+<li class="chapter" data-level="3.12" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-leyendas"><i class="fa fa-check"></i><b>3.12</b> Visualización de leyendas</a></li>
+<li class="chapter" data-level="3.13" data-path="01-intro.html"><a href="#visualiazci%C3%B3n-con-facetas"><i class="fa fa-check"></i><b>3.13</b> Visualiazción con facetas</a></li>
+<li class="chapter" data-level="3.14" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-tramas-de-viol%C3%ADn"><i class="fa fa-check"></i><b>3.14</b> Visualización de tramas de violín</a></li>
+<li class="chapter" data-level="3.15" data-path="01-intro.html"><a href="#visualizaci%C3%B3n-de-gr%C3%A1ficos-de-densidad"><i class="fa fa-check"></i><b>3.15</b> Visualización de gráficos de densidad</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ggmap.html"><a href="ggmap.html"><i class="fa fa-check"></i><b>4</b> Visualización de datos geográficos con ggmap</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="ggmap.html"><a href="ggmap.html#paquete-ggmap"><i class="fa fa-check"></i><b>4.1</b> Paquete <code>ggmap</code></a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="ggmap.html"><a href="ggmap.html#funciones-principales-de-ggmap"><i class="fa fa-check"></i><b>4.1.1</b> Funciones principales de <code>ggmap</code></a></li>
+<li class="chapter" data-level="4.1.2" data-path="01-intro.html"><a href="#relaci%C3%B3n-con-ggplot2"><i class="fa fa-check"></i><b>4.1.2</b> Relación con <code>ggplot2</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="01-intro.html"><a href="#construcci%C3%B3n-de-un-mapa-base"><i class="fa fa-check"></i><b>4.2</b> Construcción de un mapa base</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Publicado con bookdown</a></li>
@@ -557,7 +593,7 @@ Xie, Yihui. 2015. <em>Dynamic Documents with <span>R</span> and Knitr</em>. 2nd 
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="tidyverse.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="etltidyverse.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -611,20 +647,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>
