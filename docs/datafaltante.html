@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 5 Análisis con datos faltantes y detección de atípicos | Visualización de datos en R</title>
+  <meta name="description" content="Notas de clase de dataviz" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 5 Análisis con datos faltantes y detección de atípicos | Visualización de datos en R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Notas de clase de dataviz" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 5 Análisis con datos faltantes y detección de atípicos | Visualización de datos en R" />
+  
+  <meta name="twitter:description" content="Notas de clase de dataviz" />
+  
+
+<meta name="author" content="Carlos de Oro Aguado" />
+
+
+<meta name="date" content="2025-09-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ggmap.html"/>
+<link rel="next" href="referencias.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/codefolding-lua-1.1/codefolding-lua.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Visualización de datos en R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Asignatura</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#justificaci%C3%B3n"><i class="fa fa-check"></i>Justificación</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#objetivo-general-de-la-asignatura"><i class="fa fa-check"></i>Objetivo general de la asignatura</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resultados-de-aprendizaje-objetivos-espec%C3%ADficos"><i class="fa fa-check"></i>Resultados de aprendizaje (Objetivos específicos)</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#temas-de-la-asignatura"><i class="fa fa-check"></i>Temas de la asignatura</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="05-datafaltante.html"><a href="#introducci%C3%B3n-a-r-y-rstudio"><i class="fa fa-check"></i><b>1.1</b> Introducción a R y RStudio</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="05-datafaltante.html"><a href="#qu%C3%A9-es-r"><i class="fa fa-check"></i><b>1.1.1</b> ¿Qué es R?</a></li>
+<li class="chapter" data-level="1.1.2" data-path="05-datafaltante.html"><a href="#qu%C3%A9-es-rstudio"><i class="fa fa-check"></i><b>1.1.2</b> ¿Qué es RStudio?</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="05-datafaltante.html"><a href="#introducci%C3%B3n-a-git-y-github"><i class="fa fa-check"></i><b>1.2</b> Introducción a Git y GitHub</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="05-datafaltante.html"><a href="#qu%C3%A9-es-git"><i class="fa fa-check"></i><b>1.2.1</b> ¿Qué es Git?</a></li>
+<li class="chapter" data-level="1.2.2" data-path="05-datafaltante.html"><a href="#qu%C3%A9-es-github"><i class="fa fa-check"></i><b>1.2.2</b> ¿Qué es GitHub?</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#pasos-para-publicar-un-libro-bookdown-en-github-pages"><i class="fa fa-check"></i><b>1.3</b> Pasos para publicar un libro <code>bookdown</code> en GitHub Pages</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="05-datafaltante.html"><a href="#video-paso-a-paso-de-la-publicaci%C3%B3n-del-libro-en-github-pages"><i class="fa fa-check"></i><b>1.3.1</b> Video paso a paso de la publicación del libro en GitHub Pages</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="etltidyverse.html"><a href="etltidyverse.html"><i class="fa fa-check"></i><b>2</b> ETL con Tidyverse</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="etltidyverse.html"><a href="etltidyverse.html#data-frames"><i class="fa fa-check"></i><b>2.1</b> Data Frames</a></li>
+<li class="chapter" data-level="2.2" data-path="05-datafaltante.html"><a href="#importaci%C3%B3n-de-datos"><i class="fa fa-check"></i><b>2.2</b> Importación de datos</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="05-datafaltante.html"><a href="#importaci%C3%B3n-de-archivos-csv-con-read.table"><i class="fa fa-check"></i><b>2.2.1</b> Importación de archivos <code>csv</code> con <code>read.table()</code></a></li>
+<li class="chapter" data-level="2.2.2" data-path="05-datafaltante.html"><a href="#importaci%C3%B3n-de-archivos-txt-delimitados-por-tabulaci%C3%B3n-con-read.table"><i class="fa fa-check"></i><b>2.2.2</b> Importación de archivos <code>txt</code> delimitados por tabulación con <code>read.table()</code></a></li>
+<li class="chapter" data-level="2.2.3" data-path="05-datafaltante.html"><a href="#importaci%C3%B3n-de-archivos-csv-con-read.csv"><i class="fa fa-check"></i><b>2.2.3</b> Importación de archivos <code>csv</code> con <code>read.csv()</code></a></li>
+<li class="chapter" data-level="2.2.4" data-path="etltidyverse.html"><a href="etltidyverse.html#uso-de-readr-de-tidyverse"><i class="fa fa-check"></i><b>2.2.4</b> Uso de <code>readr</code> de tidyverse</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="05-datafaltante.html"><a href="#transformaci%C3%B3n-de-datos"><i class="fa fa-check"></i><b>2.3</b> Transformación de datos</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="etltidyverse.html"><a href="etltidyverse.html#el-paquete-dplyr"><i class="fa fa-check"></i><b>2.3.1</b> El paquete <code>dplyr</code></a></li>
+<li class="chapter" data-level="2.3.2" data-path="etltidyverse.html"><a href="etltidyverse.html#operador"><i class="fa fa-check"></i><b>2.3.2</b> Operador <code>%&gt;%</code></a></li>
+<li class="chapter" data-level="2.3.3" data-path="etltidyverse.html"><a href="etltidyverse.html#filtrar-datos-para-crear-un-subconjunto"><i class="fa fa-check"></i><b>2.3.3</b> Filtrar datos para crear un subconjunto</a></li>
+<li class="chapter" data-level="2.3.4" data-path="etltidyverse.html"><a href="etltidyverse.html#acotar-la-lista-de-columnas-con-select"><i class="fa fa-check"></i><b>2.3.4</b> Acotar la lista de columnas con <code>select()</code></a></li>
+<li class="chapter" data-level="2.3.5" data-path="etltidyverse.html"><a href="etltidyverse.html#organizar-las-filas"><i class="fa fa-check"></i><b>2.3.5</b> Organizar las filas</a></li>
+<li class="chapter" data-level="2.3.6" data-path="05-datafaltante.html"><a href="#a%C3%B1adir-columnas-con-mutate"><i class="fa fa-check"></i><b>2.3.6</b> Añadir columnas con <code>mutate</code></a></li>
+<li class="chapter" data-level="2.3.7" data-path="05-datafaltante.html"><a href="#agrupaci%C3%B3n-y-resumen-de-los-datos"><i class="fa fa-check"></i><b>2.3.7</b> Agrupación y resumen de los datos</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="05-datafaltante.html"><a href="#ordenaci%C3%B3n-de-datos"><i class="fa fa-check"></i><b>2.4</b> Ordenación de datos</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="05-datafaltante.html"><a href="#recopilaci%C3%B3n"><i class="fa fa-check"></i><b>2.4.1</b> Recopilación</a></li>
+<li class="chapter" data-level="2.4.2" data-path="05-datafaltante.html"><a href="#distribuci%C3%B3n"><i class="fa fa-check"></i><b>2.4.2</b> Distribución</a></li>
+<li class="chapter" data-level="2.4.3" data-path="05-datafaltante.html"><a href="#separaci%C3%B3n"><i class="fa fa-check"></i><b>2.4.3</b> Separación</a></li>
+<li class="chapter" data-level="2.4.4" data-path="05-datafaltante.html"><a href="#uni%C3%B3n"><i class="fa fa-check"></i><b>2.4.4</b> Unión</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="vizestatico.html"><a href="vizestatico.html"><i class="fa fa-check"></i><b>3</b> Exploración y visualización estática de datos</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-variables-categ%C3%B3ricas-con-gr%C3%A1ficos-de-barras"><i class="fa fa-check"></i><b>3.1</b> Visualización de variables categóricas con gráficos de barras</a></li>
+<li class="chapter" data-level="3.2" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-variable-continua-con-un-histograma"><i class="fa fa-check"></i><b>3.2</b> Visualización de variable continua con un histograma</a></li>
+<li class="chapter" data-level="3.3" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-la-covariaci%C3%B3n-con-gr%C3%A1ficos-de-caja"><i class="fa fa-check"></i><b>3.3</b> Visualización de la covariación con gráficos de caja</a></li>
+<li class="chapter" data-level="3.4" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-la-covariaci%C3%B3n-con-el-gr%C3%A1fico-de-burbuja"><i class="fa fa-check"></i><b>3.4</b> Visualización de la covariación con el gráfico de burbuja</a></li>
+<li class="chapter" data-level="3.5" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-2d-de-contenedores-y-hex%C3%A1gonos"><i class="fa fa-check"></i><b>3.5</b> Visualización 2D de contenedores y hexágonos</a></li>
+<li class="chapter" data-level="3.6" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-estad%C3%ADsticas-resumen-de-los-datos"><i class="fa fa-check"></i><b>3.6</b> Visualización de estadísticas ( resumen de los datos)</a></li>
+<li class="chapter" data-level="3.7" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-un-gr%C3%A1fico-de-correlaci%C3%B3n"><i class="fa fa-check"></i><b>3.7</b> Visualización de un gráfico de correlación</a></li>
+<li class="chapter" data-level="3.8" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-un-gr%C3%A1fico-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>3.8</b> Visualización de un gráfico de dispersión</a></li>
+<li class="chapter" data-level="3.9" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-del-gr%C3%A1fico-de-dispersi%C3%B3n-con-linea-de-tendencia"><i class="fa fa-check"></i><b>3.9</b> Visualización del gráfico de dispersión con linea de tendencia</a></li>
+<li class="chapter" data-level="3.10" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-trazado-de-categor%C3%ADas"><i class="fa fa-check"></i><b>3.10</b> Visualización de trazado de categorías</a></li>
+<li class="chapter" data-level="3.11" data-path="vizestatico.html"><a href="vizestatico.html#visualizacion-etiquetando-nombres"><i class="fa fa-check"></i><b>3.11</b> Visualizacion etiquetando nombres</a></li>
+<li class="chapter" data-level="3.12" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-leyendas"><i class="fa fa-check"></i><b>3.12</b> Visualización de leyendas</a></li>
+<li class="chapter" data-level="3.13" data-path="05-datafaltante.html"><a href="#visualiazci%C3%B3n-con-facetas"><i class="fa fa-check"></i><b>3.13</b> Visualiazción con facetas</a></li>
+<li class="chapter" data-level="3.14" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-tramas-de-viol%C3%ADn"><i class="fa fa-check"></i><b>3.14</b> Visualización de tramas de violín</a></li>
+<li class="chapter" data-level="3.15" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-gr%C3%A1ficos-de-densidad"><i class="fa fa-check"></i><b>3.15</b> Visualización de gráficos de densidad</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ggmap.html"><a href="ggmap.html"><i class="fa fa-check"></i><b>4</b> Visualización de datos geográficos con ggmap</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="ggmap.html"><a href="ggmap.html#paquete-ggmap"><i class="fa fa-check"></i><b>4.1</b> Paquete <code>ggmap</code></a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="ggmap.html"><a href="ggmap.html#funciones-principales-de-ggmap"><i class="fa fa-check"></i><b>4.1.1</b> Funciones principales de <code>ggmap</code></a></li>
+<li class="chapter" data-level="4.1.2" data-path="05-datafaltante.html"><a href="#relaci%C3%B3n-con-ggplot2"><i class="fa fa-check"></i><b>4.1.2</b> Relación con <code>ggplot2</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="05-datafaltante.html"><a href="#construcci%C3%B3n-de-un-mapa-base"><i class="fa fa-check"></i><b>4.2</b> Construcción de un mapa base</a></li>
+<li class="chapter" data-level="4.3" data-path="05-datafaltante.html"><a href="#integraci%C3%B3n-de-capas-de-informaci%C3%B3n"><i class="fa fa-check"></i><b>4.3</b> Integración de capas de información</a></li>
+<li class="chapter" data-level="4.4" data-path="05-datafaltante.html"><a href="#integraci%C3%B3n-de-capas-vectoriales-desde-shapefiles"><i class="fa fa-check"></i><b>4.4</b> Integración de capas vectoriales desde Shapefiles</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="05-datafaltante.html"><a href="#qu%C3%A9-es-un-shapefile"><i class="fa fa-check"></i><b>4.4.1</b> ¿Qué es un Shapefile?</a></li>
+<li class="chapter" data-level="4.4.2" data-path="ggmap.html"><a href="ggmap.html#lectura-de-shapefiles-en-r-con-sf"><i class="fa fa-check"></i><b>4.4.2</b> Lectura de shapefiles en <strong>R</strong> con <code>sf</code></a></li>
+<li class="chapter" data-level="4.4.3" data-path="05-datafaltante.html"><a href="#construcci%C3%B3n-de-mapas"><i class="fa fa-check"></i><b>4.4.3</b> Construcción de mapas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="datafaltante.html"><a href="datafaltante.html"><i class="fa fa-check"></i><b>5</b> Análisis con datos faltantes y detección de atípicos</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="datafaltante.html"><a href="datafaltante.html#manejo-de-datos-faltantes"><i class="fa fa-check"></i><b>5.1</b> Manejo de datos faltantes</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="datafaltante.html"><a href="datafaltante.html#consecuencias-de-los-datos-faltantes"><i class="fa fa-check"></i><b>5.1.1</b> Consecuencias de los datos faltantes</a></li>
+<li class="chapter" data-level="5.1.2" data-path="datafaltante.html"><a href="datafaltante.html#tratamientos-para-los-datos-faltantes"><i class="fa fa-check"></i><b>5.1.2</b> Tratamientos para los datos faltantes</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="05-datafaltante.html"><a href="#manejo-de-datos-at%C3%ADpicos"><i class="fa fa-check"></i><b>5.2</b> Manejo de datos atípicos</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="05-datafaltante.html"><a href="#consecuencias-de-los-datos-at%C3%ADpicos"><i class="fa fa-check"></i><b>5.2.1</b> Consecuencias de los datos atípicos</a></li>
+<li class="chapter" data-level="5.2.2" data-path="05-datafaltante.html"><a href="#tratamientos-para-los-datos-at%C3%ADpicos"><i class="fa fa-check"></i><b>5.2.2</b> Tratamientos para los datos atípicos</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="05-datafaltante.html"><a href="#visualizaci%C3%B3n-de-los-datos-faltantes"><i class="fa fa-check"></i><b>5.3</b> Visualización de los datos faltantes</a></li>
+<li class="chapter" data-level="5.4" data-path="05-datafaltante.html"><a href="#eliminaci%C3%B3n-de-datos-faltantes"><i class="fa fa-check"></i><b>5.4</b> Eliminación de datos faltantes</a></li>
+<li class="chapter" data-level="5.5" data-path="05-datafaltante.html"><a href="#imputaci%C3%B3n-de-datos-con-el-promedio-o-mediana"><i class="fa fa-check"></i><b>5.5</b> Imputación de datos con el promedio o mediana</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="05-datafaltante.html"><a href="#la-importancia-de-la-distribuci%C3%B3n"><i class="fa fa-check"></i><b>5.5.1</b> La importancia de la distribución</a></li>
+<li class="chapter" data-level="5.5.2" data-path="05-datafaltante.html"><a href="#imputaci%C3%B3n-con-la-media"><i class="fa fa-check"></i><b>5.5.2</b> Imputación con la media</a></li>
+<li class="chapter" data-level="5.5.3" data-path="05-datafaltante.html"><a href="#imputaci%C3%B3n-con-la-mediana"><i class="fa fa-check"></i><b>5.5.3</b> Imputación con la mediana</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="05-datafaltante.html"><a href="#imputaci%C3%B3n-de-datos-con-el-paquete-mice"><i class="fa fa-check"></i><b>5.6</b> Imputación de datos con el paquete <code>mice</code></a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="datafaltante.html"><a href="datafaltante.html#paquete-mice"><i class="fa fa-check"></i><b>5.6.1</b> Paquete <code>MICE</code></a></li>
+<li class="chapter" data-level="5.6.2" data-path="05-datafaltante.html"><a href="#par%C3%A1metros-principales-de-mice"><i class="fa fa-check"></i><b>5.6.2</b> Parámetros principales de <code>mice</code></a></li>
+<li class="chapter" data-level="5.6.3" data-path="05-datafaltante.html"><a href="#m%C3%A9todos-disponibles-en-mice"><i class="fa fa-check"></i><b>5.6.3</b> Métodos disponibles en <code>mice</code></a></li>
+<li class="chapter" data-level="5.6.4" data-path="datafaltante.html"><a href="datafaltante.html#ventajas-y-limitaciones-de-mice"><i class="fa fa-check"></i><b>5.6.4</b> Ventajas y limitaciones de MICE</a></li>
+<li class="chapter" data-level="5.6.5" data-path="05-datafaltante.html"><a href="#imputaci%C3%B3n-de-datos-con-emparejamiento-predictivo-medio"><i class="fa fa-check"></i><b>5.6.5</b> Imputación de datos con emparejamiento predictivo medio</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="05-datafaltante.html"><a href="#imputaci%C3%B3n-de-datos-con-modelos-de-regresi%C3%B3n"><i class="fa fa-check"></i><b>5.7</b> Imputación de datos con modelos de regresión</a></li>
+<li class="chapter" data-level="5.8" data-path="05-datafaltante.html"><a href="#detecci%C3%B3n-de-datos-at%C3%ADpicos"><i class="fa fa-check"></i><b>5.8</b> Detección de datos atípicos</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="05-datafaltante.html"><a href="#valores-at%C3%ADpicos"><i class="fa fa-check"></i><b>5.8.1</b> Valores atípicos</a></li>
+<li class="chapter" data-level="5.8.2" data-path="05-datafaltante.html"><a href="#estad%C3%ADsticas-descriptivas"><i class="fa fa-check"></i><b>5.8.2</b> Estadísticas descriptivas</a></li>
+<li class="chapter" data-level="5.8.3" data-path="datafaltante.html"><a href="datafaltante.html#percentiles"><i class="fa fa-check"></i><b>5.8.3</b> Percentiles</a></li>
+<li class="chapter" data-level="5.8.4" data-path="datafaltante.html"><a href="datafaltante.html#filtro-de-hampel"><i class="fa fa-check"></i><b>5.8.4</b> Filtro de Hampel</a></li>
+<li class="chapter" data-level="5.8.5" data-path="datafaltante.html"><a href="datafaltante.html#prueba-de-grubbs"><i class="fa fa-check"></i><b>5.8.5</b> Prueba de Grubbs</a></li>
+<li class="chapter" data-level="5.8.6" data-path="datafaltante.html"><a href="datafaltante.html#prueba-de-dixon"><i class="fa fa-check"></i><b>5.8.6</b> Prueba de Dixon</a></li>
+<li class="chapter" data-level="5.8.7" data-path="datafaltante.html"><a href="datafaltante.html#prueba-de-rosner"><i class="fa fa-check"></i><b>5.8.7</b> Prueba de Rosner</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="05-datafaltante.html"><a href="#tratamiento-de-datos-at%C3%ADpicos"><i class="fa fa-check"></i><b>5.9</b> Tratamiento de datos atípicos</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Publicado con bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Visualización de datos en R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="datafaltante" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Capítulo 5</span> Análisis con datos faltantes y detección de atípicos<a href="datafaltante.html#datafaltante" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="manejo-de-datos-faltantes" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Manejo de datos faltantes<a href="datafaltante.html#manejo-de-datos-faltantes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los <strong>datos faltantes</strong> son uno de los temas menos abordados en la mayoría de los textos introductorios. Probablemente, esto se deba a que hasta hace poco abundaba más la teoría que las aplicaciones prácticas en su tratamiento. Sin embargo, con el crecimiento del análisis de datos, hoy es un asunto que no puede ignorarse, pues impacta directamente en la calidad de los resultados.</p>
+<p>Las investigaciones más técnicas aún los consideran un reto, sobre todo desde el punto de vista matemático. Aun así, la relevancia práctica es clara: los datos faltantes están presentes en encuestas, mediciones de laboratorio, registros de salud, sistemas de monitoreo ambiental, entre muchos otros.<br />
+Esta sección presenta una introducción al tema y a las técnicas más efectivas para abordarlo. En términos generales, cuando los datos faltan, <strong>la mejor manera de tratarlos es imputarlos, no ignorarlos</strong>. Esto implica completar la información ausente con valores estimados que permitan mantener la coherencia y la validez de los análisis.</p>
+<div id="consecuencias-de-los-datos-faltantes" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Consecuencias de los datos faltantes<a href="datafaltante.html#consecuencias-de-los-datos-faltantes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Dificultan la aplicación de modelos estadísticos.<br />
+</li>
+<li>Reducen la potencia de los análisis.<br />
+</li>
+<li>Pueden sesgar los resultados si no se tratan adecuadamente.<br />
+</li>
+<li>En la práctica, han impedido la participación de individuos en encuestas o cuestionarios, lo que limita la representatividad de los estudios.</li>
+</ul>
+</div>
+<div id="tratamientos-para-los-datos-faltantes" class="section level3 hasAnchor" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Tratamientos para los datos faltantes<a href="datafaltante.html#tratamientos-para-los-datos-faltantes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Existen diferentes estrategias:<br />
+- <strong>Eliminación de casos incompletos</strong>: opción sencilla, pero que reduce el tamaño muestral y puede sesgar los resultados.<br />
+- <strong>Imputación simple</strong>: sustitución de los valores faltantes por medidas como la media, mediana o moda.<br />
+- <strong>Imputación múltiple</strong>: genera varios conjuntos de datos con imputaciones diferentes, permitiendo obtener estimaciones más robustas y reducir la incertidumbre.</p>
+<p>En la práctica, <strong>no hay un único método correcto</strong>. Todo depende del contexto, del tipo de variable y de la magnitud del problema.</p>
+</div>
+</div>
+<div id="manejo-de-datos-atípicos" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Manejo de datos atípicos<a href="#manejo-de-datos-at%C3%ADpicos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los <strong>datos atípicos (outliers)</strong> son valores extremos que difieren significativamente del resto de las observaciones. Aunque en ocasiones corresponden a errores de medición, también pueden reflejar fenómenos reales que aportan información valiosa.</p>
+<div id="consecuencias-de-los-datos-atípicos" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Consecuencias de los datos atípicos<a href="#consecuencias-de-los-datos-at%C3%ADpicos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Distorsionan medidas estadísticas como la media y la desviación estándar.<br />
+</li>
+<li>Afectan la estimación de parámetros en modelos de regresión.<br />
+</li>
+<li>Pueden generar interpretaciones erróneas si no se identifican y analizan adecuadamente.</li>
+</ul>
+</div>
+<div id="tratamientos-para-los-datos-atípicos" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Tratamientos para los datos atípicos<a href="#tratamientos-para-los-datos-at%C3%ADpicos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Detección</strong> mediante métodos gráficos (boxplot, histogramas, diagramas de dispersión) y técnicas estadísticas (z-score, IQR, modelos robustos).<br />
+</li>
+<li><strong>Eliminación de outliers</strong> cuando son claramente errores de medición o registros imposibles.<br />
+</li>
+<li><strong>Transformaciones</strong> (logarítmica, raíz cuadrada) que reducen la influencia de valores extremos.<br />
+</li>
+<li><strong>Métodos robustos</strong> que limitan el impacto de los outliers sin eliminarlos (regresiones robustas, estimadores no paramétricos).</li>
+</ul>
+<hr />
+<p>En conclusión, el análisis de datos faltantes y atípicos no debe verse como un paso opcional, sino como parte esencial del <strong>preprocesamiento de datos</strong>. La validez de cualquier modelo estadístico o de machine learning depende directamente de cómo se manejen estas problemáticas.</p>
+<p>En este documento hemos introducido tanto las técnicas de imputación como las de detección y tratamiento de valores atípicos, ofreciendo un panorama que permite avanzar hacia análisis más confiables, precisos y con base científica.</p>
+</div>
+</div>
+<div id="visualización-de-los-datos-faltantes" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Visualización de los datos faltantes<a href="#visualizaci%C3%B3n-de-los-datos-faltantes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para demostrar la visualización de patrones de <strong>datos ausentes</strong>, primero necesitamos crear algunos valores faltantes. Para <strong>mostrar cómo utilizar la imputación múltiple en un escenario semirrealista</strong>, vamos a crear una versión del conjunto de datos <code>mtcars</code> con algunos valores eliminados.</p>
+<p>Configuramos <code>set.seed()</code> (para garantizar la <strong>aleatoriedad determinista</strong>) y creamos una nueva variable que mantenga nuestro conjunto de datos modificado.</p>
+<ol style="list-style-type: decimal">
+<li>Los datos se extrajeron de la revista <em>Motor Trend US</em> de 1974, y comprenden el <strong>consumo de combustible</strong> y <strong>10 aspectos del diseño y el rendimiento de 32 automóviles</strong> (modelos de 1973 a 1974) (ver <a href="https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/mtcars"><code>mtcars</code></a>).</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="datafaltante.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="datafaltante.html#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="datafaltante.html#cb1-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb1-4"><a href="datafaltante.html#cb1-4" tabindex="-1"></a>miss_mtcars <span class="ot">&lt;-</span> mtcars</span></code></pre></div>
+</details>
+<ul>
+<li>En primer lugar, vamos a crear <strong>siete valores faltantes</strong> en <code>drat</code> (alrededor del 20%), <strong>cinco valores faltantes</strong> en la columna <code>mpg</code> (alrededor del 15%), <strong>cinco valores faltantes</strong> en la columna <code>cyl</code>, <strong>tres valores faltantes</strong> en <code>wt</code> (alrededor del 10%), y <strong>tres valores faltantes</strong> en <code>vs</code>.</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="datafaltante.html#cb2-1" tabindex="-1"></a>some_rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(miss_mtcars), <span class="dv">7</span>)</span>
+<span id="cb2-2"><a href="datafaltante.html#cb2-2" tabindex="-1"></a>miss_mtcars<span class="sc">$</span>drat[some_rows] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb2-3"><a href="datafaltante.html#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="datafaltante.html#cb2-4" tabindex="-1"></a>some_rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(miss_mtcars), <span class="dv">5</span>)</span>
+<span id="cb2-5"><a href="datafaltante.html#cb2-5" tabindex="-1"></a>miss_mtcars<span class="sc">$</span>mpg[some_rows] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb2-6"><a href="datafaltante.html#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="datafaltante.html#cb2-7" tabindex="-1"></a>some_rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(miss_mtcars), <span class="dv">5</span>)</span>
+<span id="cb2-8"><a href="datafaltante.html#cb2-8" tabindex="-1"></a>miss_mtcars<span class="sc">$</span>cyl[some_rows] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb2-9"><a href="datafaltante.html#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="datafaltante.html#cb2-10" tabindex="-1"></a>some_rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(miss_mtcars), <span class="dv">3</span>)</span>
+<span id="cb2-11"><a href="datafaltante.html#cb2-11" tabindex="-1"></a>miss_mtcars<span class="sc">$</span>wt[some_rows] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb2-12"><a href="datafaltante.html#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="datafaltante.html#cb2-13" tabindex="-1"></a>some_rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(miss_mtcars), <span class="dv">3</span>)</span>
+<span id="cb2-14"><a href="datafaltante.html#cb2-14" tabindex="-1"></a>miss_mtcars<span class="sc">$</span>vs[some_rows] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+</details>
+<ul>
+<li>Ahora, vamos a crear <strong>cuatro valores faltantes</strong> en <code>qsec</code>, pero sólo para los coches automáticos:</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="datafaltante.html#cb3-1" tabindex="-1"></a>only_automatic <span class="ot">&lt;-</span> <span class="fu">which</span>(miss_mtcars<span class="sc">$</span>am<span class="sc">==</span><span class="dv">0</span>)</span>
+<span id="cb3-2"><a href="datafaltante.html#cb3-2" tabindex="-1"></a>some_rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(only_automatic, <span class="dv">4</span>)</span>
+<span id="cb3-3"><a href="datafaltante.html#cb3-3" tabindex="-1"></a>miss_mtcars<span class="sc">$</span>qsec[some_rows] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+</details>
+<ul>
+<li>Ahora, observemos las primeras filas del nuevo conjunto de datos</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="datafaltante.html#cb4-1" tabindex="-1"></a><span class="fu">head</span>(miss_mtcars)</span></code></pre></div>
+</details>
+<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0  NA  160 110 3.90 2.620 16.46 NA  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8  NA  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105   NA 3.460 20.22  1  0    3    1</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="datafaltante.html#cb6-1" tabindex="-1"></a><span class="fu">str</span>(miss_mtcars)</span></code></pre></div>
+</details>
+<pre><code>## &#39;data.frame&#39;:    32 obs. of  11 variables:
+##  $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 NA 19.2 ...
+##  $ cyl : num  NA 6 NA 6 8 6 8 4 4 6 ...
+##  $ disp: num  160 160 108 258 360 ...
+##  $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...
+##  $ drat: num  3.9 3.9 3.85 3.08 3.15 NA 3.21 NA 3.92 3.92 ...
+##  $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...
+##  $ qsec: num  16.5 17 18.6 19.4 17 ...
+##  $ vs  : num  NA 0 1 1 0 1 NA 1 1 1 ...
+##  $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
+##  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
+##  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...</code></pre>
+<hr />
+<ol start="2" style="list-style-type: decimal">
+<li>Ahora vamos a <strong>visualizar los datos faltantes</strong>. La primera forma en que vamos a <em>visualizar el patrón de los datos faltantes</em> es utilizando la función <code>md.pattern</code> del paquete <code>mice</code> (que es también el paquete que usaremos para <strong>imputar</strong> nuestros datos faltantes).</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="datafaltante.html#cb8-1" tabindex="-1"></a><span class="fu">library</span>(mice)</span>
+<span id="cb8-2"><a href="datafaltante.html#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="datafaltante.html#cb8-3" tabindex="-1"></a><span class="fu">md.pattern</span>(miss_mtcars, <span class="at">plot =</span> <span class="cn">TRUE</span>, <span class="at">rotate.names =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/faltantesdata-1.png" width="672" /></p>
+<pre><code>##    disp hp am gear carb wt vs qsec mpg cyl drat   
+## 12    1  1  1    1    1  1  1    1   1   1    1  0
+## 6     1  1  1    1    1  1  1    1   1   1    0  1
+## 2     1  1  1    1    1  1  1    1   1   0    1  1
+## 3     1  1  1    1    1  1  1    1   0   1    1  1
+## 1     1  1  1    1    1  1  1    1   0   0    1  2
+## 1     1  1  1    1    1  1  1    0   1   1    1  1
+## 1     1  1  1    1    1  1  1    0   0   1    1  2
+## 1     1  1  1    1    1  1  0    1   1   0    1  2
+## 1     1  1  1    1    1  1  0    0   1   1    1  2
+## 1     1  1  1    1    1  1  0    0   1   0    1  3
+## 2     1  1  1    1    1  0  1    1   1   1    1  1
+## 1     1  1  1    1    1  0  1    1   1   1    0  2
+##       0  0  0    0    0  3  3    4   5   5    7 27</code></pre>
+<ul>
+<li><p><strong>Columnas (arriba):</strong> cada nombre corresponde a una <strong>variable</strong> del conjunto de datos (<code>disp</code>, <code>hp</code>, <code>am</code>, <code>gear</code>, <code>carb</code>, <code>wt</code>, <code>vs</code>, <code>mpg</code>, <code>cyl</code>, <code>drat</code>, <code>qsec</code>, etc.).</p></li>
+<li><p><strong>Cuadrícula de colores:</strong></p>
+<ul>
+<li><strong>Azul</strong> = valor <strong>observado</strong> (no faltante).</li>
+<li><strong>Rosa</strong> = valor <strong>faltante</strong> (<code>NA</code>).</li>
+<li>Cada <strong>fila</strong> de la cuadrícula representa un <strong>patrón único</strong> de ausencia/presencia a través de todas las variables.</li>
+</ul></li>
+<li><p><strong>Números en el </strong>margen izquierdo<strong>:</strong> indican la <strong>frecuencia</strong> (cuántas filas del dataset) que exhiben <strong>ese patrón</strong> específico.</p>
+<ul>
+<li>Ejemplo: si ves “12” en la primera fila, significa “hay 12 observaciones con ese patrón” (a menudo, la fila superior suele ser el <strong>patrón completo</strong>: sin <code>NA</code>).</li>
+</ul></li>
+<li><p>Números en el <strong>margen derecho</strong>: muestran <strong>cuántas variables faltan</strong> en ese patrón (0, 1, 2, …).</p>
+<ul>
+<li>Sirve para distinguir patrones con 1, 2 o más variables ausentes.</li>
+</ul></li>
+<li><p>Números en la <strong>base</strong> (debajo de cada columna): total de <strong>valores faltantes por variable</strong>.</p>
+<ul>
+<li>Útil para ver rápidamente <strong>qué variable tiene más <code>NA</code></strong>.</li>
+<li>En tu simulación, verás más <code>NA</code> en variables a las que se los inyectaste (p. ej., <code>drat</code>, <code>mpg</code>, <code>cyl</code>, <code>wt</code>, <code>vs</code>, y <code>qsec</code> para automáticos).</li>
+</ul></li>
+</ul>
+<hr />
+<ol start="3" style="list-style-type: decimal">
+<li>Ahora vamos a visualizar el patrón de datos faltantes gráficamente utilizando el paquete <code>VIM</code>, el cual debe instalar en caso de no contar con este.</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="datafaltante.html#cb10-1" tabindex="-1"></a><span class="fu">library</span>(VIM)</span>
+<span id="cb10-2"><a href="datafaltante.html#cb10-2" tabindex="-1"></a><span class="fu">aggr</span>(miss_mtcars, <span class="at">numbers=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/vim-1.png" width="672" /></p>
+<ul>
+<li><p>A simple vista, esta representación nos muestra que la columna <code>drat</code> <strong>representa la mayor proporción de datos faltantes por columnas</strong>, seguida de <code>mpg</code>, <code>cyl</code>, <code>qsec</code>, <code>vs</code> y <code>wt</code>.</p></li>
+<li><p>El gráfico de la derecha nos muestra información similar a la salida de <code>md.pattern</code>. Esta representación, sin embargo, facilita identificar si hay algún <strong>patrón sistemático de omisión</strong>.</p></li>
+<li><p><strong>Interpretación de los colores:</strong></p>
+<ul>
+<li><strong>Celdas azules</strong> → datos no ausentes.<br />
+</li>
+<li><strong>Celdas rojas</strong> → datos faltantes.</li>
+</ul></li>
+<li><p><strong>Números en la derecha del gráfico:</strong> representan la <strong>proporción de filas</strong> que muestran ese patrón de datos faltantes.<br />
+</p></li>
+<li><p>En este ejemplo, el <strong>37.5% de las filas no contienen ningún tipo de dato faltante</strong>.</p></li>
+</ul>
+<hr />
+<ol start="4" style="list-style-type: decimal">
+<li>Por otro lado, un gráfico de barras comparando la proporción de <code>NA</code> por variable</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="datafaltante.html#cb11-1" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
+<span id="cb11-2"><a href="datafaltante.html#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="datafaltante.html#cb11-3" tabindex="-1"></a><span class="co"># Gráfico de proporción de NA por variable</span></span>
+<span id="cb11-4"><a href="datafaltante.html#cb11-4" tabindex="-1"></a><span class="fu">gg_miss_var</span>(miss_mtcars) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="datafaltante.html#cb11-5" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Proporción de datos faltantes por variable&quot;</span>,</span>
+<span id="cb11-6"><a href="datafaltante.html#cb11-6" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">&quot;Variable&quot;</span>,</span>
+<span id="cb11-7"><a href="datafaltante.html#cb11-7" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">&quot;Número de valores faltantes&quot;</span>)</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/grafmiss-1.png" width="672" /></p>
+<ul>
+<li>Las variables con <strong>mayor número de valores faltantes</strong> son:
+<ul>
+<li><code>qsec</code> y <code>drat</code> con <strong>7 valores faltantes</strong> cada una.<br />
+</li>
+<li><code>mpg</code> y <code>cyl</code> con <strong>5 valores faltantes</strong> cada una.</li>
+</ul></li>
+<li>En un segundo nivel de afectación:
+<ul>
+<li><code>wt</code> y <code>vs</code> con <strong>3 valores faltantes</strong> cada una.</li>
+</ul></li>
+<li>El resto de las variables (<code>hp</code>, <code>gear</code>, <code>disp</code>, <code>carb</code>, <code>am</code>) presentan <strong>muy pocos o ningún dato faltante</strong>, lo que indica que no requieren un tratamiento prioritario.</li>
+</ul>
+<p>En conclusión, el <strong>patrón de ausencia no está distribuido de manera uniforme</strong> en todas las variables.</p>
+<ul>
+<li>Existen <strong>columnas críticas</strong> como <code>qsec</code>, <code>drat</code>, <code>mpg</code> y <code>cyl</code>, que concentran la mayor parte de los datos ausentes.<br />
+</li>
+<li>Para aplicar un método de imputación, será necesario:
+<ul>
+<li>Evaluar si estas variables son relevantes para el análisis principal.<br />
+</li>
+<li>Considerar imputaciones robustas como la <strong>imputación múltiple</strong> en aquellas con mayor proporción de NA.<br />
+</li>
+<li>Posiblemente eliminar o transformar las observaciones si la proporción de ausentes supera un umbral crítico.</li>
+</ul></li>
+</ul>
+<hr />
+<ol start="5" style="list-style-type: decimal">
+<li>Otra forma de mirar los datos faltantes es usando el paquete de <code>Amelia</code>:</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="datafaltante.html#cb12-1" tabindex="-1"></a><span class="fu">library</span>(Amelia)</span>
+<span id="cb12-2"><a href="datafaltante.html#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="datafaltante.html#cb12-3" tabindex="-1"></a><span class="fu">missmap</span>(miss_mtcars)</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/amelia-1.png" width="672" /></p>
+<ul>
+<li>Los datos faltantes no están distribuidos al azar: se concentran en variables como <code>qsec</code>, <code>drat</code>, <code>cyl</code>, <code>mpg</code>, <code>vs</code> y <code>wt</code>.<br />
+</li>
+<li>Existen patrones visibles: varias filas muestran <strong>faltantes en más de una variable a la vez</strong>, lo cual podría indicar un mecanismo de omisión sistemático.<br />
+</li>
+<li>Este tipo de visualización permite identificar:
+<ul>
+<li><strong>Observaciones con muchos faltantes</strong> (filas con varias celdas blancas).<br />
+</li>
+<li><strong>Variables críticas</strong> con más datos ausentes.</li>
+</ul></li>
+</ul>
+<hr />
+<ol start="6" style="list-style-type: decimal">
+<li><strong>Parallel boxplots</strong>: El método <code>VIM</code> permite <strong>comparar las distribuciones condicionales de una variable continua</strong> según un conjunto de variables, con valores recodificados como <em>faltantes</em> o <em>no faltantes</em>, mediante múltiples <strong>diagramas de caja paralelos</strong>.<br />
+</li>
+</ol>
+<ul>
+<li><p>Estos diagramas son útiles para explorar si una <strong>variable continua</strong> explica la distribución de valores faltantes en otra variable. En la siguiente figura se muestra un ejemplo con la variable <code>age</code> en los datos de <em>EU-SILC User Guide</em>.</p></li>
+<li><p><strong>Además del diagrama de caja estándar</strong>, se muestran diagramas de caja agrupados por valores observados (<em>gris claro</em>) y faltantes (<em>gris oscuro</em>) en los diferentes componentes de ingresos.</p>
+<ul>
+<li>El ancho de las cajas puede ser proporcional al tamaño del grupo o de tamaño igual.<br />
+</li>
+<li>En este ejemplo no es posible utilizar la primera opción porque la <strong>proporción de valores faltantes es cercana a 0</strong> para algunos componentes de ingresos.</li>
+</ul></li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:mp-fig"></span>
+<img src="images/missing.png" alt="Boxplots paralelos" width="90%" />
+<p class="caption">
+Figura 5.1: Boxplots paralelos
+</p>
+</div>
+<ul>
+<li><p>En muchos componentes, <em>la presencia de valores faltantes claramente depende de la magnitud de los valores de la edad</em>.<br />
+Por ejemplo, los valores faltantes en la variable <code>py080n</code> (beneficios por desempleo) ocurren predominantemente para <strong>individuos más jóvenes</strong>. Esto indica situaciones <strong>MAR (Missing At Random)</strong> para los valores faltantes en estas variables, lo cual es información útil para los especialistas en la materia.</p></li>
+<li><p><strong>Scatterplots</strong>: La implementación en <code>VIM</code> también incluye <strong>boxplots para datos disponibles y faltantes en los márgenes del gráfico</strong>.</p>
+<ul>
+<li>Las <strong>frecuencias de valores faltantes</strong> en una o ambas variables se representan mediante números en la esquina inferior izquierda.<br />
+</li>
+<li>Este gráfico será denominado en adelante <code>marginplot</code>.</li>
+</ul></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="datafaltante.html#cb13-1" tabindex="-1"></a><span class="fu">marginplot</span>(miss_mtcars[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/marginplot-1.png" width="672" /></p>
+<ul>
+<li>El <strong>diagrama de caja rojo</strong> de la izquierda muestra la distribución del número de cilindros <code>cyl</code>, agrupados por datos faltantes para <code>mpg</code>, mientras que el <strong>diagrama de caja azul</strong> muestra esta distribución para datos observados de <code>mpg</code>. Lo mismo ocurre con los gráficos de caja de <code>cyl</code> en la parte inferior del gráfico.</li>
+</ul>
+<p>Si los datos tienen mecanismo <strong>MCAR (Missing Completely At Random)</strong>, <strong>se espera que los gráficos de caja rojos y azules sean muy similares</strong>.</p>
+<p>Para más información, ver el artículo asociado: <a href="https://link.springer.com/article/10.1007/s11634-011-0102-y"><em>Exploring incomplete data using visualization techniques</em></a>.</p>
+<hr />
+<ol start="7" style="list-style-type: decimal">
+<li>Otra forma de identificar <code>NA</code>s por columnas es de la siguiente forma</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="datafaltante.html#cb14-1" tabindex="-1"></a>miss_mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="datafaltante.html#cb14-2" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
+</details>
+<pre><code>##   NA_mpg NA_cyl NA_disp NA_hp NA_drat NA_wt NA_qsec NA_vs NA_am NA_gear NA_carb
+## 1      5      5       0     0       7     3       4     3     0       0       0</code></pre>
+</div>
+<div id="eliminación-de-datos-faltantes" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Eliminación de datos faltantes<a href="#eliminaci%C3%B3n-de-datos-faltantes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Uno de los métodos más utilizados por los científicos de datos para tratar valores faltantes es <strong>omitir los casos que contienen <code>NA</code> y analizar únicamente las observaciones completas</strong>. Este procedimiento se conoce como <strong>eliminación por lista</strong> o <strong>análisis de casos completos</strong>.</p>
+<p>En R, se implementa con la función <code>na.omit()</code>, la cual elimina todas las filas que contengan uno o más valores faltantes.</p>
+<div class="admon-box ventaja">
+<div class="admon-title">
+<span class="icon"></span> Ventajas
+</div>
+<ol>
+<li>
+Es un método <strong>simple y rápido</strong> de aplicar.
+</li>
+<li>
+No requiere cálculos adicionales ni suposiciones complejas.
+</li>
+</ol>
+</div>
+<div class="admon-box advertencia">
+<div class="admon-title">
+<span class="icon"></span>Desventajas
+</div>
+<ol>
+<li>
+Si los datos son <strong>MCAR (Missing Completely At Random)</strong>, la eliminación puede generar una <strong>reducción innecesaria del tamaño muestral</strong>,lo que afecta la precisión de las estimaciones y aumenta los errores estándar.
+</li>
+<li>
+Si los datos <strong>no son MCAR</strong>, este método introduce <strong>sesgos importantes</strong> como medias, estimaciones de regresión, correlaciones. En consecuencia, la supresión de casos puede producir <strong>submuestras poco representativas</strong> y análisis engañosos.
+</li>
+</ol>
+</div>
+<hr />
+<div class="admon-box ejemplo">
+<div class="admon-title">
+<span class="icon"></span> Ejemplo con el conjunto de datos <code>airquality</code>
+</div>
+<p>
+Tomaremos el conjunto de datos <code>airquality</code>, que contiene <strong>mediciones diarias de la calidad del aire en Nueva York de mayo a septiembre de 1973</strong>.Este dataset incluye variables con valores faltantes (<code>NA</code>).
+</p>
+<p>
+El conjunto de datos representa <strong>154 días consecutivos</strong>, por lo que la eliminación de filas completas puede afectar la <strong>continuidad temporal</strong> y, en consecuencia, cualquier <em>análisis de series de tiempo</em>.
+</p>
+</div>
+<ol style="list-style-type: decimal">
+<li>Para este ejemplo, eliminaremos algunos puntos de datos del conjunto.
+<ul>
+<li>En el caso de <strong>variables categóricas</strong>, la sustitución de valores faltantes <strong>no siempre es aconsejable</strong>.<br />
+</li>
+<li>Algunas prácticas comunes consisten en sustituir los valores faltantes por la <strong>moda</strong> de la variable.<br />
+</li>
+<li>Sin embargo, esta práctica es <strong>cuestionable</strong> porque puede introducir sesgos y distorsionar la distribución real.</li>
+</ul></li>
+</ol>
+<ul>
+<li><p>En este caso, como no hay variables categóricas con valores faltantes, no es necesario aplicar este tratamiento. Si fuera necesario, siempre es posible añadirlas nuevamente al conjunto de datos más adelante.</p></li>
+<li><p>Podemos hacer una primera inspección de los datos y de sus valores faltantes con:</p></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="datafaltante.html#cb16-1" tabindex="-1"></a><span class="co"># Exploración del dataset airquality</span></span>
+<span id="cb16-2"><a href="datafaltante.html#cb16-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> airquality</span>
+<span id="cb16-3"><a href="datafaltante.html#cb16-3" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(data))</span></code></pre></div>
+</details>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Ozone</th>
+<th align="right">Solar.R</th>
+<th align="right">Wind</th>
+<th align="right">Temp</th>
+<th align="right">Month</th>
+<th align="right">Day</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">41</td>
+<td align="right">190</td>
+<td align="right">7.4</td>
+<td align="right">67</td>
+<td align="right">5</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">36</td>
+<td align="right">118</td>
+<td align="right">8.0</td>
+<td align="right">72</td>
+<td align="right">5</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">12</td>
+<td align="right">149</td>
+<td align="right">12.6</td>
+<td align="right">74</td>
+<td align="right">5</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">18</td>
+<td align="right">313</td>
+<td align="right">11.5</td>
+<td align="right">62</td>
+<td align="right">5</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">14.3</td>
+<td align="right">56</td>
+<td align="right">5</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="right">NA</td>
+<td align="right">14.9</td>
+<td align="right">66</td>
+<td align="right">5</td>
+<td align="right">6</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Agreguemos más datos faltantes</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="datafaltante.html#cb17-1" tabindex="-1"></a>data[<span class="dv">4</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">7</span>)</span>
+<span id="cb17-2"><a href="datafaltante.html#cb17-2" tabindex="-1"></a>data[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb17-3"><a href="datafaltante.html#cb17-3" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="datafaltante.html#cb17-4" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">6</span>)]</span>
+<span id="cb17-5"><a href="datafaltante.html#cb17-5" tabindex="-1"></a><span class="fu">summary</span>(data)</span></code></pre></div>
+</details>
+<pre><code>##      Ozone           Solar.R           Wind             Temp      
+##  Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :57.00  
+##  1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:73.00  
+##  Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
+##  Mean   : 42.13   Mean   :185.9   Mean   : 9.806   Mean   :78.28  
+##  3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
+##  Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
+##  NA&#39;s   :37       NA&#39;s   :7       NA&#39;s   :7        NA&#39;s   :5</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="datafaltante.html#cb19-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(data))</span></code></pre></div>
+</details>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Ozone</th>
+<th align="right">Solar.R</th>
+<th align="right">Wind</th>
+<th align="right">Temp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">41</td>
+<td align="right">190</td>
+<td align="right">7.4</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">36</td>
+<td align="right">118</td>
+<td align="right">8.0</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">12</td>
+<td align="right">149</td>
+<td align="right">12.6</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">18</td>
+<td align="right">313</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">66</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>Nótese que la variable <code>Ozone</code> es la que contiene <strong>más puntos de datos faltantes</strong>.</p></li>
+<li><p>A continuación, vamos a profundizar en los <strong>patrones de datos ausentes</strong>. Suponiendo que los datos sean <strong>MCAR (Missing Completely At Random)</strong>, demasiados datos faltantes también pueden representar un problema.</p></li>
+<li><p>Como regla práctica, se considera que un <strong>umbral máximo seguro es el 5% del total de datos</strong> en conjuntos grandes. Si una variable o muestra presenta más del <strong>5% de datos faltantes</strong>, probablemente deba excluirse del análisis.</p></li>
+<li><p>Para verificarlo, revisamos:</p>
+<ul>
+<li>Las <strong>características (columnas)</strong> con más del 5% de datos faltantes.<br />
+</li>
+<li>Las <strong>muestras (filas)</strong> en las que falta más del 5% de los datos.</li>
+</ul></li>
+<li><p>Para saber el conteo y el porcentaje de <code>NA</code>s usemos la función <code>pivot_longer</code>, este sirve para <strong>reorganizar</strong> esa tabla “ancha” en un formato <strong>largo</strong></p></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="datafaltante.html#cb20-1" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="datafaltante.html#cb20-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(</span>
+<span id="cb20-3"><a href="datafaltante.html#cb20-3" tabindex="-1"></a>    <span class="fu">everything</span>(),</span>
+<span id="cb20-4"><a href="datafaltante.html#cb20-4" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb20-5"><a href="datafaltante.html#cb20-5" tabindex="-1"></a>      <span class="at">NA_count   =</span> <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)),</span>
+<span id="cb20-6"><a href="datafaltante.html#cb20-6" tabindex="-1"></a>      <span class="at">NA_percent =</span> <span class="sc">~</span> <span class="fu">mean</span>(<span class="fu">is.na</span>(.)) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb20-7"><a href="datafaltante.html#cb20-7" tabindex="-1"></a>    )</span>
+<span id="cb20-8"><a href="datafaltante.html#cb20-8" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb20-9"><a href="datafaltante.html#cb20-9" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb20-10"><a href="datafaltante.html#cb20-10" tabindex="-1"></a>    <span class="fu">everything</span>(),</span>
+<span id="cb20-11"><a href="datafaltante.html#cb20-11" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;dummy&quot;</span>, <span class="st">&quot;.value&quot;</span>),</span>
+<span id="cb20-12"><a href="datafaltante.html#cb20-12" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">&quot;_&quot;</span></span>
+<span id="cb20-13"><a href="datafaltante.html#cb20-13" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb20-14"><a href="datafaltante.html#cb20-14" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>dummy)   </span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 4 × 3
+##   Variable count percent
+##   &lt;chr&gt;    &lt;int&gt;   &lt;dbl&gt;
+## 1 Ozone       37   24.2 
+## 2 Solar.R      7    4.58
+## 3 Wind         7    4.58
+## 4 Temp         5    3.27</code></pre>
+<ul>
+<li><p>Vemos que a la variable <code>Ozone</code> le falta casi el <strong>25% de los puntos de datos</strong>, por lo que podríamos considerar la posibilidad de <strong>eliminarla del análisis</strong> o de <strong>reunir más mediciones</strong>. Las demás variables están por debajo del <strong>umbral del 5%</strong>, por lo que podemos mantenerlas en el análisis.</p></li>
+<li><p>Usemos la función <code>md.pattern()</code> para conocer mejor el <strong>patrón de los datos que faltan</strong>.</p></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="datafaltante.html#cb22-1" tabindex="-1"></a><span class="fu">library</span>(mice)</span>
+<span id="cb22-2"><a href="datafaltante.html#cb22-2" tabindex="-1"></a><span class="fu">md.pattern</span>(data, <span class="at">rotate.names =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/mice2-1.png" width="672" /></p>
+<pre><code>##     Temp Solar.R Wind Ozone   
+## 104    1       1    1     1  0
+## 34     1       1    1     0  1
+## 3      1       1    0     1  1
+## 1      1       1    0     0  2
+## 4      1       0    1     1  1
+## 1      1       0    1     0  2
+## 1      1       0    0     1  2
+## 3      0       1    1     1  1
+## 1      0       1    0     1  2
+## 1      0       0    0     0  4
+##        5       7    7    37 56</code></pre>
+<ul>
+<li><p>La salida nos indica que <strong>104 muestras están completas</strong>,
+que a <strong>34 muestras les falta sólo la medición de <code>Ozone</code></strong>, que a <strong>4 muestras les falta sólo el valor de <code>Solar.R</code></strong>, y así sucesivamente.</p></li>
+<li><p>Una representación visual quizás más útil puede obtenerse utilizando el paquete <code>VIM</code>, de la siguiente manera:</p></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="datafaltante.html#cb24-1" tabindex="-1"></a><span class="fu">library</span>(VIM)</span>
+<span id="cb24-2"><a href="datafaltante.html#cb24-2" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="datafaltante.html#cb24-3" tabindex="-1"></a>aggr_plot <span class="ot">&lt;-</span> <span class="fu">aggr</span>(data, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;navyblue&#39;</span>,<span class="st">&#39;red&#39;</span>), </span>
+<span id="cb24-4"><a href="datafaltante.html#cb24-4" tabindex="-1"></a>                  <span class="at">numbers=</span><span class="cn">TRUE</span>, <span class="at">sortVars=</span><span class="cn">TRUE</span>,</span>
+<span id="cb24-5"><a href="datafaltante.html#cb24-5" tabindex="-1"></a>                  <span class="at">labels=</span><span class="fu">names</span>(data),<span class="at">cex.axis=</span>.<span class="dv">7</span>,</span>
+<span id="cb24-6"><a href="datafaltante.html#cb24-6" tabindex="-1"></a>                  <span class="at">gap=</span><span class="dv">3</span>, <span class="at">ylab=</span><span class="fu">c</span>(<span class="st">&quot;Barplot of missing data&quot;</span>,<span class="st">&quot;Pattern&quot;</span>))</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/vim1-1.png" width="672" /></p>
+<pre><code>## 
+##  Variables sorted by number of missings: 
+##  Variable      Count
+##     Ozone 0.24183007
+##   Solar.R 0.04575163
+##      Wind 0.04575163
+##      Temp 0.03267974</code></pre>
+<ul>
+<li><p>El gráfico nos ayuda a entender que <strong>casi el 70% de las muestras no presentan valores faltantes</strong>, mientras que al <strong>22% les falta el valor de <code>Ozone</code></strong> y las restantes muestran otros patrones de ausencia.</p></li>
+<li><p>A través de este enfoque, la situación parece un poco más clara. Otra aproximación visual útil es un <strong>gráfico de caja especial</strong>.</p></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="datafaltante.html#cb26-1" tabindex="-1"></a><span class="fu">marginplot</span>(data[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)])</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/marginplot3-1.png" width="672" /></p>
+<ul>
+<li>Aquí estamos limitados a trazar sólo <strong>2 variables a la vez</strong>, pero aun así podemos obtener algunas ideas interesantes.
+<ul>
+<li>El <strong>diagrama de caja rojo de la izquierda</strong> muestra la distribución de <strong>datos faltantes para <code>Ozone</code></strong>,mientras que el <strong>diagrama de caja azul</strong> muestra la distribución de los <strong>puntos de datos restantes</strong>.</li>
+<li>Lo mismo ocurre con los gráficos de caja de <code>Solar.R</code> en la parte inferior del gráfico.</li>
+<li>Si nuestra suposición de que los datos son <strong>MCAR (Missing Completely At Random)</strong> es correcta, entonces esperamos que <strong>los gráficos de caja rojos y azules sean muy similares</strong>.</li>
+</ul></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>A continuación, realizamos una simple función <code>na.omit()</code> para eliminar los casos que tienen <code>NA</code>s. Vemos que todas las filas que contenían algún <code>NA</code> en cualquier variable son eliminadas del dataframe.</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="datafaltante.html#cb27-1" tabindex="-1"></a>data_omit <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(data)</span>
+<span id="cb27-2"><a href="datafaltante.html#cb27-2" tabindex="-1"></a><span class="fu">head</span>(data_omit)</span></code></pre></div>
+</details>
+<pre><code>##    Ozone Solar.R Wind Temp
+## 12    16     256  9.7   69
+## 13    11     290  9.2   66
+## 14    14     274 10.9   68
+## 15    18      65 13.2   58
+## 16    14     334 11.5   64
+## 17    34     307 12.0   66</code></pre>
+<ul>
+<li>Dibujemos los histogramas antes y después de la imputación/eliminación usando <code>ggplot</code></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="datafaltante.html#cb29-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb29-2"><a href="datafaltante.html#cb29-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb29-3"><a href="datafaltante.html#cb29-3" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb29-4"><a href="datafaltante.html#cb29-4" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="datafaltante.html#cb29-5" tabindex="-1"></a>ggp1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">value=</span>data<span class="sc">$</span>Ozone), <span class="fu">aes</span>(<span class="at">x=</span>value)) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="datafaltante.html#cb29-6" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">&quot;#FBD000&quot;</span>, <span class="at">color=</span><span class="st">&quot;#E52521&quot;</span>, <span class="at">alpha=</span><span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb29-7"><a href="datafaltante.html#cb29-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Data Original &quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-8"><a href="datafaltante.html#cb29-8" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&#39;Ozone&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Frecuencia&#39;</span>) <span class="sc">+</span></span>
+<span id="cb29-9"><a href="datafaltante.html#cb29-9" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb29-10"><a href="datafaltante.html#cb29-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">15</span>))</span>
+<span id="cb29-11"><a href="datafaltante.html#cb29-11" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="datafaltante.html#cb29-12" tabindex="-1"></a>ggp2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">value=</span>data_omit<span class="sc">$</span>Ozone), <span class="fu">aes</span>(<span class="at">x=</span>value)) <span class="sc">+</span></span>
+<span id="cb29-13"><a href="datafaltante.html#cb29-13" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">&quot;#43B047&quot;</span>, <span class="at">color=</span><span class="st">&quot;#049CD8&quot;</span>, <span class="at">alpha=</span><span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb29-14"><a href="datafaltante.html#cb29-14" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Eliminación por fila&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-15"><a href="datafaltante.html#cb29-15" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&#39;Ozone&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Frecuencia&#39;</span>) <span class="sc">+</span></span>
+<span id="cb29-16"><a href="datafaltante.html#cb29-16" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb29-17"><a href="datafaltante.html#cb29-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">15</span>))</span>
+<span id="cb29-18"><a href="datafaltante.html#cb29-18" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="datafaltante.html#cb29-19" tabindex="-1"></a><span class="fu">grid.arrange</span>(ggp1, ggp2, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/grafelim-1.png" width="672" /></p>
+</div>
+<div id="imputación-de-datos-con-el-promedio-o-mediana" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Imputación de datos con el promedio o mediana<a href="#imputaci%C3%B3n-de-datos-con-el-promedio-o-mediana" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La <strong>imputación</strong> es el proceso mediante el cual se reemplazan estos valores perdidos por estimaciones que permitan completar la base de datos y continuar con el análisis.</p>
+<p>Existen múltiples técnicas de imputación. Entre las más sencillas y utilizadas están la imputación por <strong>media</strong> y la imputación por <strong>mediana</strong>.</p>
+<div id="la-importancia-de-la-distribución" class="section level3 hasAnchor" number="5.5.1">
+<h3><span class="header-section-number">5.5.1</span> La importancia de la distribución<a href="#la-importancia-de-la-distribuci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Antes de imputar, es recomendable analizar la <strong>distribución de los datos</strong>:</p>
+<ul>
+<li><p><strong>Distribución aproximadamente normal (simétrica):</strong> La media y la mediana son muy similares. En este caso, imputar con la <strong>media</strong> es razonable, ya que no introduce mucho sesgo y conserva el promedio de la variable.</p></li>
+<li><p><strong>Distribución asimétrica o con outliers:</strong> La media se desplaza hacia los valores extremos, dejando de ser representativa. En este escenario, la <strong>mediana</strong> es más adecuada porque refleja mejor la tendencia central real y es robusta frente a valores atípicos.</p></li>
+</ul>
+<p>En conclusión: la <strong>forma de la distribución guía la elección</strong> del método de imputación.</p>
+</div>
+<div id="imputación-con-la-media" class="section level3 hasAnchor" number="5.5.2">
+<h3><span class="header-section-number">5.5.2</span> Imputación con la media<a href="#imputaci%C3%B3n-con-la-media" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La imputación por la <strong>media</strong> consiste en reemplazar cada valor faltante por el promedio de los valores observados en la misma variable.</p>
+<div class="admon-box ventaja">
+<div class="admon-title">
+<span class="icon"></span> Ventajas de imputación con la media
+</div>
+<ol>
+<li>
+Método rápido y fácil de implementar.
+</li>
+<li>
+Mantiene el promedio de la variable en el conjunto de datos.
+</li>
+<li>
+Adecuado si la distribución es normal y no hay outliers significativos.
+</li>
+</ol>
+</div>
+<div class="admon-box advertencia">
+<div class="admon-title">
+<span class="icon"></span> Limitaciones de imputación con la media
+</div>
+<ol>
+<li>
+Sensible a la presencia de valores extremos.
+</li>
+<li>
+Reduce la variabilidad.
+</li>
+<li>
+Puede distorsionar correlaciones con otras variables.
+</li>
+</ol>
+</div>
+</div>
+<div id="imputación-con-la-mediana" class="section level3 hasAnchor" number="5.5.3">
+<h3><span class="header-section-number">5.5.3</span> Imputación con la mediana<a href="#imputaci%C3%B3n-con-la-mediana" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La imputación por la <strong>mediana</strong> consiste en reemplazar los valores faltantes por el valor central de los datos observados.</p>
+<div class="admon-box ventaja">
+<div class="admon-title">
+<span class="icon"></span> Ventajas de imputación con la mediana
+</div>
+<ol>
+<li>
+Robusta frente a la presencia de valores atípicos.
+</li>
+<li>
+Preserva mejor la tendencia central cuando la distribución es asimétrica.
+</li>
+<li>
+Más confiable en variables sesgadas.
+</li>
+</ol>
+</div>
+<div class="admon-box advertencia">
+<div class="admon-title">
+<span class="icon"></span> Limitaciones de imputación con la mediana
+</div>
+<ol>
+<li>
+Al igual que la media, reduce la variabilidad.
+</li>
+<li>
+Reemplaza todos los valores perdidos por un único valor fijo.
+</li>
+<li>
+Puede alterar las relaciones estadísticas entre variables.
+</li>
+</ol>
+</div>
+<ol style="list-style-type: decimal">
+<li>Continuemos con el ejemplo de <code>airquality</code>:</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="datafaltante.html#cb30-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> airquality</span>
+<span id="cb30-2"><a href="datafaltante.html#cb30-2" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="datafaltante.html#cb30-3" tabindex="-1"></a><span class="fu">summary</span>(data) </span></code></pre></div>
+</details>
+<pre><code>##      Ozone           Solar.R           Wind             Temp      
+##  Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
+##  1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
+##  Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
+##  Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
+##  3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
+##  Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
+##  NA&#39;s   :37       NA&#39;s   :7                                       
+##      Month            Day      
+##  Min.   :5.000   Min.   : 1.0  
+##  1st Qu.:6.000   1st Qu.: 8.0  
+##  Median :7.000   Median :16.0  
+##  Mean   :6.993   Mean   :15.8  
+##  3rd Qu.:8.000   3rd Qu.:23.0  
+##  Max.   :9.000   Max.   :31.0  
+## </code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="datafaltante.html#cb32-1" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="datafaltante.html#cb32-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(</span>
+<span id="cb32-3"><a href="datafaltante.html#cb32-3" tabindex="-1"></a>    <span class="fu">everything</span>(),</span>
+<span id="cb32-4"><a href="datafaltante.html#cb32-4" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb32-5"><a href="datafaltante.html#cb32-5" tabindex="-1"></a>      <span class="at">NA_count   =</span> <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)),</span>
+<span id="cb32-6"><a href="datafaltante.html#cb32-6" tabindex="-1"></a>      <span class="at">NA_percent =</span> <span class="sc">~</span> <span class="fu">mean</span>(<span class="fu">is.na</span>(.)) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb32-7"><a href="datafaltante.html#cb32-7" tabindex="-1"></a>    )</span>
+<span id="cb32-8"><a href="datafaltante.html#cb32-8" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb32-9"><a href="datafaltante.html#cb32-9" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb32-10"><a href="datafaltante.html#cb32-10" tabindex="-1"></a>    <span class="fu">everything</span>(),</span>
+<span id="cb32-11"><a href="datafaltante.html#cb32-11" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;dummy&quot;</span>, <span class="st">&quot;.value&quot;</span>),</span>
+<span id="cb32-12"><a href="datafaltante.html#cb32-12" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">&quot;_&quot;</span></span>
+<span id="cb32-13"><a href="datafaltante.html#cb32-13" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb32-14"><a href="datafaltante.html#cb32-14" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>dummy)   </span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 6 × 3
+##   Variable count percent
+##   &lt;chr&gt;    &lt;int&gt;   &lt;dbl&gt;
+## 1 Ozone       37   24.2 
+## 2 Solar.R      7    4.58
+## 3 Wind         0    0   
+## 4 Temp         0    0   
+## 5 Month        0    0   
+## 6 Day          0    0</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Haremos imputación de datos a la variable <code>Ozone</code>. Empecemos con un diagrama de densidad sin los datos faltantes</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="datafaltante.html#cb34-1" tabindex="-1"></a>ozone_noNA <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(data<span class="sc">$</span>Ozone)</span>
+<span id="cb34-2"><a href="datafaltante.html#cb34-2" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="datafaltante.html#cb34-3" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">Ozone =</span> ozone_noNA) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-4"><a href="datafaltante.html#cb34-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Ozone)) <span class="sc">+</span></span>
+<span id="cb34-5"><a href="datafaltante.html#cb34-5" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">&quot;steelblue&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb34-6"><a href="datafaltante.html#cb34-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb34-7"><a href="datafaltante.html#cb34-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Densidad de Ozone (sin NA)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Ozone&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>)</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Hagamos una prueba de normalidad de los datos</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="datafaltante.html#cb35-1" tabindex="-1"></a><span class="fu">ks.test</span>(<span class="fu">scale</span>(ozone_noNA),<span class="st">&#39;pnorm&#39;</span>)</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Asymptotic one-sample Kolmogorov-Smirnov test
+## 
+## data:  scale(ozone_noNA)
+## D = 0.14799, p-value = 0.01243
+## alternative hypothesis: two-sided</code></pre>
+<ul>
+<li>Como los datos de <code>Ozone</code> no tienen comportamiento normal, realizaremos la imputación de los datos con la mediana</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="datafaltante.html#cb37-1" tabindex="-1"></a>new_data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="datafaltante.html#cb37-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Ozone_mediana =</span>  <span class="fu">replace_na</span>(<span class="fu">as.numeric</span>(Ozone), <span class="fu">median</span>(Ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span></code></pre></div>
+</details>
+<ol start="4" style="list-style-type: decimal">
+<li>Hagamos una comparación con la data original y los datos imputados usando gráficos de densidad</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="datafaltante.html#cb38-1" tabindex="-1"></a>new_data <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="datafaltante.html#cb38-2" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb38-3"><a href="datafaltante.html#cb38-3" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">x =</span> Ozone, <span class="at">fill =</span> <span class="st">&quot;Original&quot;</span>), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb38-4"><a href="datafaltante.html#cb38-4" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">x =</span> Ozone_mediana, <span class="at">fill =</span> <span class="st">&quot;Imputado (mediana)&quot;</span>), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb38-5"><a href="datafaltante.html#cb38-5" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb38-6"><a href="datafaltante.html#cb38-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Densidad: Ozone Original vs Ozone Imputado (mediana)&quot;</span>,</span>
+<span id="cb38-7"><a href="datafaltante.html#cb38-7" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Ozone&quot;</span>,</span>
+<span id="cb38-8"><a href="datafaltante.html#cb38-8" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>,</span>
+<span id="cb38-9"><a href="datafaltante.html#cb38-9" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">&quot;Tipo de dato&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-10"><a href="datafaltante.html#cb38-10" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Original&quot;</span> <span class="ot">=</span> <span class="st">&quot;steelblue&quot;</span>, <span class="st">&quot;Imputado (mediana)&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>))</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/comimp-1.png" width="672" /></p>
+<ul>
+<li>La imputación con la <strong>mediana</strong> es adecuada en este caso porque la variable no sigue una distribución normal y está sesgada con outliers. Sin embargo, este método <strong>reduce la variabilidad y distorsiona la forma real de la distribución</strong> al concentrar valores en un solo punto.</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li>Ahora, hagamos la comparación con un diagrama de cajas y bigotes</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="datafaltante.html#cb39-1" tabindex="-1"></a>new_data <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="datafaltante.html#cb39-2" tabindex="-1"></a>  <span class="fu">select</span>(Ozone, Ozone_mediana) <span class="sc">%&gt;%</span></span>
+<span id="cb39-3"><a href="datafaltante.html#cb39-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(Ozone, Ozone_mediana),</span>
+<span id="cb39-4"><a href="datafaltante.html#cb39-4" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;Tipo&quot;</span>,</span>
+<span id="cb39-5"><a href="datafaltante.html#cb39-5" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;Valor&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb39-6"><a href="datafaltante.html#cb39-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Tipo =</span> <span class="fu">recode</span>(Tipo,</span>
+<span id="cb39-7"><a href="datafaltante.html#cb39-7" tabindex="-1"></a>                       <span class="at">Ozone =</span> <span class="st">&quot;Original (sin NA)&quot;</span>,</span>
+<span id="cb39-8"><a href="datafaltante.html#cb39-8" tabindex="-1"></a>                       <span class="at">Ozone_mediana =</span> <span class="st">&quot;Imputado (mediana)&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb39-9"><a href="datafaltante.html#cb39-9" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Tipo, <span class="at">y =</span> Valor, <span class="at">fill =</span> Tipo)) <span class="sc">+</span></span>
+<span id="cb39-10"><a href="datafaltante.html#cb39-10" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb39-11"><a href="datafaltante.html#cb39-11" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Original (sin NA)&quot;</span> <span class="ot">=</span> <span class="st">&quot;steelblue&quot;</span>,</span>
+<span id="cb39-12"><a href="datafaltante.html#cb39-12" tabindex="-1"></a>                               <span class="st">&quot;Imputado (mediana)&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb39-13"><a href="datafaltante.html#cb39-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb39-14"><a href="datafaltante.html#cb39-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Boxplot: Ozone Original vs Ozone Imputado (mediana)&quot;</span>,</span>
+<span id="cb39-15"><a href="datafaltante.html#cb39-15" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Tipo de dato&quot;</span>,</span>
+<span id="cb39-16"><a href="datafaltante.html#cb39-16" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Ozone&quot;</span>,</span>
+<span id="cb39-17"><a href="datafaltante.html#cb39-17" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">&quot;Conjunto&quot;</span>)</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/boxplotimp-1.png" width="672" /></p>
+<ul>
+<li>La imputación con la <strong>mediana</strong> es adecuada porque la variable no es normal y presenta outliers, pero sacrifica la variabilidad. El método es útil como aproximación robusta, aunque <strong>no conserva del todo la distribución original</strong>.</li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li>Hagamos una prueba para ver si las distribuciones difieren o no.</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="datafaltante.html#cb40-1" tabindex="-1"></a><span class="co"># Datos originales sin NA</span></span>
+<span id="cb40-2"><a href="datafaltante.html#cb40-2" tabindex="-1"></a>ozone_noNA <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(data<span class="sc">$</span>Ozone)</span>
+<span id="cb40-3"><a href="datafaltante.html#cb40-3" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="datafaltante.html#cb40-4" tabindex="-1"></a><span class="co"># Prueba KS entre original e imputado</span></span>
+<span id="cb40-5"><a href="datafaltante.html#cb40-5" tabindex="-1"></a><span class="fu">ks.test</span>(ozone_noNA, new_data<span class="sc">$</span>Ozone_mediana)</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Asymptotic two-sample Kolmogorov-Smirnov test
+## 
+## data:  ozone_noNA and new_data$Ozone_mediana
+## D = 0.12092, p-value = 0.2897
+## alternative hypothesis: two-sided</code></pre>
+<ul>
+<li>La imputación de los valores faltantes de <code>Ozone</code> con la <code>mediana no modificó significativamente la distribución</code> de los datos en comparación con los valores originales.</li>
+</ul>
+<ol start="7" style="list-style-type: decimal">
+<li>Ahora, como en tu caso <strong>imputaste con la mediana</strong>, la comparación correcta es usar la <strong>prueba de Wilcoxon de rangos</strong> (también llamada <em>Mann–Whitney U test</em> cuando son muestras independientes)</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="datafaltante.html#cb42-1" tabindex="-1"></a><span class="co"># Prueba de Wilcoxon: compara las medianas de original vs imputado</span></span>
+<span id="cb42-2"><a href="datafaltante.html#cb42-2" tabindex="-1"></a><span class="fu">wilcox.test</span>(ozone_noNA, new_data<span class="sc">$</span>Ozone_mediana)</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Wilcoxon rank sum test with continuity correction
+## 
+## data:  ozone_noNA and new_data$Ozone_mediana
+## W = 8874, p-value = 1
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<ul>
+<li>Esto confirma que la <strong>imputación con la mediana preserva el centro de la distribución</strong>. Aunque vimos que se reduce la <strong>variabilidad</strong> (la dispersión disminuye), el valor central de la distribución se mantiene intacto.</li>
+</ul>
+</div>
+</div>
+<div id="imputación-de-datos-con-el-paquete-mice" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Imputación de datos con el paquete <code>mice</code><a href="#imputaci%C3%B3n-de-datos-con-el-paquete-mice" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="paquete-mice" class="section level3 hasAnchor" number="5.6.1">
+<h3><span class="header-section-number">5.6.1</span> Paquete <code>MICE</code><a href="datafaltante.html#paquete-mice" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El paquete <strong>MICE</strong> (<em>Multivariate Imputation by Chained Equations</em>) en <strong>R</strong> es una herramienta poderosa para la imputación de valores faltantes. A diferencia de métodos simples como la imputación por <strong>media</strong> o <strong>mediana</strong>, <code>mice</code> implementa la <strong>imputación múltiple</strong>, lo cual permite capturar la incertidumbre de los datos faltantes.</p>
+<p>Cabe resaltar que</p>
+<ul>
+<li>Los datos faltantes representan incertidumbre.<br />
+</li>
+<li>La imputación simple (media/mediana) reemplaza cada <code>NA</code> por un único valor, reduciendo la variabilidad.<br />
+</li>
+<li><code>mice</code> en cambio genera <strong>m conjuntos imputados</strong>, cada uno con valores distintos para los <code>NA</code>.<br />
+</li>
+<li>Esto se hace modelando cada variable con faltantes a partir de las demás variables en el dataset (<strong>cadena de ecuaciones</strong>).<br />
+</li>
+<li>Los resultados pueden combinarse para obtener inferencias robustas.</li>
+</ul>
+</div>
+<div id="parámetros-principales-de-mice" class="section level3 hasAnchor" number="5.6.2">
+<h3><span class="header-section-number">5.6.2</span> Parámetros principales de <code>mice</code><a href="#par%C3%A1metros-principales-de-mice" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p><strong><code>method</code></strong>: define el método de imputación.</p>
+<ul>
+<li><code>"mean"</code> → imputación con la media.<br />
+</li>
+<li><code>"pmm"</code> (default) → <em>Predictive Mean Matching</em>.<br />
+</li>
+<li><code>"cart"</code> → árboles de decisión.<br />
+</li>
+<li><code>"rf"</code> → Random Forest.</li>
+</ul></li>
+<li><p><strong><code>m</code></strong>: número de datasets imputados.</p>
+<ul>
+<li>Default: <code>m = 5</code>.<br />
+</li>
+<li>Permite capturar la incertidumbre generando varias versiones del dataset.</li>
+</ul></li>
+<li><p><strong><code>maxit</code></strong>: número de iteraciones.</p>
+<ul>
+<li>Default: <code>maxit = 50</code>.<br />
+</li>
+<li>Controla cuántas veces se repite la imputación hasta converger.</li>
+</ul></li>
+<li><p><strong><code>seed</code></strong>: semilla para garantizar reproducibilidad.</p></li>
+<li><p><strong><code>complete()</code></strong>: extrae un dataset completo imputado.</p></li>
+</ul>
+</div>
+<div id="métodos-disponibles-en-mice" class="section level3 hasAnchor" number="5.6.3">
+<h3><span class="header-section-number">5.6.3</span> Métodos disponibles en <code>mice</code><a href="#m%C3%A9todos-disponibles-en-mice" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Algunos de los métodos más relevantes son:</p>
+<ul>
+<li><strong>Numéricos:</strong>
+<ul>
+<li><code>mice.impute.mean</code> → imputación por la media.<br />
+</li>
+<li><code>mice.impute.norm</code> → regresión normal.<br />
+</li>
+<li><code>mice.impute.pmm</code> → <em>Predictive Mean Matching</em>.<br />
+</li>
+<li><code>mice.impute.cart</code> → árboles de decisión.<br />
+</li>
+<li><code>mice.impute.rf</code> → Random Forest.</li>
+</ul></li>
+<li><strong>Categóricos:</strong>
+<ul>
+<li><code>mice.impute.logreg</code> → regresión logística.<br />
+</li>
+<li><code>mice.impute.polyreg</code> → regresión polinómica multinomial.<br />
+</li>
+<li><code>mice.impute.polr</code> → regresión logística ordinal.</li>
+</ul></li>
+<li><strong>Otros:</strong>
+<ul>
+<li><code>mice.impute.2l.norm</code> → modelos jerárquicos.<br />
+</li>
+<li><code>mice.impute.passive</code> → imputación pasiva (variables derivadas).<br />
+</li>
+<li><code>mice.impute.jomoImpute</code> → modelos bayesianos mixtos.</li>
+</ul></li>
+</ul>
+</div>
+<div id="ventajas-y-limitaciones-de-mice" class="section level3 hasAnchor" number="5.6.4">
+<h3><span class="header-section-number">5.6.4</span> Ventajas y limitaciones de MICE<a href="datafaltante.html#ventajas-y-limitaciones-de-mice" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="admon-box ventaja">
+<div class="admon-title">
+<span class="icon"></span> Ventaja de <code>mice</code>
+</div>
+<ol>
+<li>
+Captura la incertidumbre de los valores faltantes.
+</li>
+<li>
+Compatible con múltiples tipos de variables (numéricas, categóricas, jerárquicas).
+</li>
+<li>
+Permite métodos avanzados (PMM, RF, CART, regresión, etc.).
+</li>
+</ol>
+</div>
+<div class="admon-box advertencia">
+<div class="admon-title">
+<span class="icon"></span> Limitaciones de <code>mice</code>
+</div>
+<ol>
+<li>
+Más complejo que imputación simple.
+</li>
+<li>
+Mayor costo computacional.
+</li>
+<li>
+Requiere conocimiento estadístico para elegir métodos adecuados.
+</li>
+</ol>
+</div>
+<hr />
+<p>Comparación de métodos de imputación</p>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="18%" />
+<col width="26%" />
+<col width="28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Método</th>
+<th>Ventajas</th>
+<th>Limitaciones</th>
+<th>Recomendación</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Media</td>
+<td>Simple, rápido</td>
+<td>Sensible a outliers, reduce variabilidad</td>
+<td>Distribuciones normales sin outliers</td>
+</tr>
+<tr class="even">
+<td>Mediana</td>
+<td>Robusto, útil con sesgos</td>
+<td>Reduce variabilidad, concentra valores</td>
+<td>Distribuciones asimétricas o con outliers</td>
+</tr>
+<tr class="odd">
+<td>PMM</td>
+<td>Valores realistas, evita extremos</td>
+<td>Más complejo, requiere iteraciones</td>
+<td>Método recomendado en la mayoría de casos</td>
+</tr>
+<tr class="even">
+<td>RandomForest</td>
+<td>Captura relaciones no lineales</td>
+<td>Computacionalmente costoso</td>
+<td>Datos con alta complejidad</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="imputación-de-datos-con-emparejamiento-predictivo-medio" class="section level3 hasAnchor" number="5.6.5">
+<h3><span class="header-section-number">5.6.5</span> Imputación de datos con emparejamiento predictivo medio<a href="#imputaci%C3%B3n-de-datos-con-emparejamiento-predictivo-medio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El método Predictive Mean Matching <code>PMM</code> es uno de los más usados en mice porque combina lo predictivo con lo realista.</p>
+<ul>
+<li><strong>¿Qué hace el método <code>pmm</code>?</strong>
+<ol style="list-style-type: decimal">
+<li>Para cada valor faltante, mice ajusta un <strong>modelo de regresión</strong> usando las demás variables como predictores.</li>
+<li>Con ese modelo se <strong>predice</strong> el valor esperado del caso con el <code>NA</code>.</li>
+<li>Se buscan en los datos observados los <strong>k casos más cercanos</strong> a esa predicción (vecinos).</li>
+<li>El valor faltante se reemplaza con uno de esos valores <strong>reales observados</strong>, elegido al azar.</li>
+</ol></li>
+</ul>
+<p>Las ventajas de este método <code>PMM</code> <strong>utiliza aleatoriedad en la imputación para introducir variabilidad en las estimaciones de los valores faltantes</strong>. Esto ayuda a evitar la <strong>sobreestimación o subestimación sistemática de los valores imputados</strong> y a capturar la incertidumbre asociada con la imputación de datos faltantes. La <strong>introducción de aleatoriedad también puede ayudar a mejorar la robustez y generalización del modelo de imputación</strong>, especialmente en situaciones donde los datos faltantes siguen patrones complejos o no aleatorios.</p>
+<ol style="list-style-type: decimal">
+<li>Realicemos la imputacion con los datos faltantes para <code>Ozono</code> y <code>Solar.R</code> pueden ser imputados por la función <code>mice()</code>.</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="datafaltante.html#cb44-1" tabindex="-1"></a><span class="fu">library</span>(mice)</span>
+<span id="cb44-2"><a href="datafaltante.html#cb44-2" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="datafaltante.html#cb44-3" tabindex="-1"></a><span class="co"># Imputación múltiple usando el paquete mice</span></span>
+<span id="cb44-4"><a href="datafaltante.html#cb44-4" tabindex="-1"></a>imp <span class="ot">&lt;-</span> <span class="fu">mice</span>(</span>
+<span id="cb44-5"><a href="datafaltante.html#cb44-5" tabindex="-1"></a>  data,             <span class="co"># datos con NA</span></span>
+<span id="cb44-6"><a href="datafaltante.html#cb44-6" tabindex="-1"></a>  <span class="at">m =</span> <span class="dv">5</span>,            <span class="co"># número de datasets imputados</span></span>
+<span id="cb44-7"><a href="datafaltante.html#cb44-7" tabindex="-1"></a>  <span class="at">maxit =</span> <span class="dv">50</span>,       <span class="co"># iteraciones de imputación</span></span>
+<span id="cb44-8"><a href="datafaltante.html#cb44-8" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;pmm&quot;</span>,   <span class="co"># método: Predictive Mean Matching</span></span>
+<span id="cb44-9"><a href="datafaltante.html#cb44-9" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">500</span>,       <span class="co"># semilla para reproducibilidad</span></span>
+<span id="cb44-10"><a href="datafaltante.html#cb44-10" tabindex="-1"></a>  <span class="at">printFlag =</span> <span class="cn">FALSE</span> <span class="co"># no mostrar mensajes en consola</span></span>
+<span id="cb44-11"><a href="datafaltante.html#cb44-11" tabindex="-1"></a>)</span></code></pre></div>
+</details>
+<ol start="2" style="list-style-type: decimal">
+<li>Podemos recuperar el conjunto de datos completo utilizando la función <code>complete()</code>:</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="datafaltante.html#cb45-1" tabindex="-1"></a>imp_df <span class="ot">&lt;-</span> <span class="fu">complete</span>(imp)</span>
+<span id="cb45-2"><a href="datafaltante.html#cb45-2" tabindex="-1"></a><span class="fu">head</span>(imp_df)</span></code></pre></div>
+</details>
+<pre><code>##   Ozone Solar.R Wind Temp Month Day
+## 1    41     190  7.4   67     5   1
+## 2    36     118  8.0   72     5   2
+## 3    12     149 12.6   74     5   3
+## 4    18     313 11.5   62     5   4
+## 5    14     237 14.3   56     5   5
+## 6    28      82 14.9   66     5   6</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Separemos los datos y realicemos un grafico de comparación para la variable <code>Ozone</code>:</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="datafaltante.html#cb47-1" tabindex="-1"></a><span class="co"># Separar originales e imputados (Ozone)</span></span>
+<span id="cb47-2"><a href="datafaltante.html#cb47-2" tabindex="-1"></a>original_ozone <span class="ot">&lt;-</span> data<span class="sc">$</span>Ozone[<span class="sc">!</span><span class="fu">is.na</span>(data<span class="sc">$</span>Ozone)]   <span class="co"># valores originales</span></span>
+<span id="cb47-3"><a href="datafaltante.html#cb47-3" tabindex="-1"></a>imputed_only_ozone <span class="ot">&lt;-</span> imp_df<span class="sc">$</span>Ozone[<span class="fu">is.na</span>(data<span class="sc">$</span>Ozone)] <span class="co"># solo imputados</span></span>
+<span id="cb47-4"><a href="datafaltante.html#cb47-4" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="datafaltante.html#cb47-5" tabindex="-1"></a><span class="co"># Crear un data.frame combinado</span></span>
+<span id="cb47-6"><a href="datafaltante.html#cb47-6" tabindex="-1"></a>ozone_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb47-7"><a href="datafaltante.html#cb47-7" tabindex="-1"></a>  <span class="at">Valor =</span> <span class="fu">c</span>(original_ozone, imputed_only_ozone),</span>
+<span id="cb47-8"><a href="datafaltante.html#cb47-8" tabindex="-1"></a>  <span class="at">Tipo  =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Original&quot;</span>, <span class="fu">length</span>(original_ozone)),</span>
+<span id="cb47-9"><a href="datafaltante.html#cb47-9" tabindex="-1"></a>            <span class="fu">rep</span>(<span class="st">&quot;Imputado (PMM)&quot;</span>, <span class="fu">length</span>(imputed_only_ozone)))</span>
+<span id="cb47-10"><a href="datafaltante.html#cb47-10" tabindex="-1"></a>)</span>
+<span id="cb47-11"><a href="datafaltante.html#cb47-11" tabindex="-1"></a></span>
+<span id="cb47-12"><a href="datafaltante.html#cb47-12" tabindex="-1"></a><span class="co"># Gráfico de densidad</span></span>
+<span id="cb47-13"><a href="datafaltante.html#cb47-13" tabindex="-1"></a><span class="fu">ggplot</span>(ozone_df, <span class="fu">aes</span>(<span class="at">x =</span> Valor, <span class="at">fill =</span> Tipo)) <span class="sc">+</span></span>
+<span id="cb47-14"><a href="datafaltante.html#cb47-14" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb47-15"><a href="datafaltante.html#cb47-15" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Densidad: Ozone Original vs Imputado (PMM)&quot;</span>,</span>
+<span id="cb47-16"><a href="datafaltante.html#cb47-16" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Ozone&quot;</span>,</span>
+<span id="cb47-17"><a href="datafaltante.html#cb47-17" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>,</span>
+<span id="cb47-18"><a href="datafaltante.html#cb47-18" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">&quot;Tipo de dato&quot;</span>) <span class="sc">+</span></span>
+<span id="cb47-19"><a href="datafaltante.html#cb47-19" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb47-20"><a href="datafaltante.html#cb47-20" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Original&quot;</span> <span class="ot">=</span> <span class="st">&quot;steelblue&quot;</span>,</span>
+<span id="cb47-21"><a href="datafaltante.html#cb47-21" tabindex="-1"></a>                               <span class="st">&quot;Imputado (PMM)&quot;</span> <span class="ot">=</span> <span class="st">&quot;purple&quot;</span>))</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/sep-1.png" width="672" /></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Realicemos las pruebas estadísticas:</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="datafaltante.html#cb48-1" tabindex="-1"></a><span class="co"># Prueba KS</span></span>
+<span id="cb48-2"><a href="datafaltante.html#cb48-2" tabindex="-1"></a>ks_result <span class="ot">&lt;-</span> <span class="fu">ks.test</span>(original_ozone, imputed_only_ozone)</span>
+<span id="cb48-3"><a href="datafaltante.html#cb48-3" tabindex="-1"></a><span class="fu">print</span>(ks_result)</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Exact two-sample Kolmogorov-Smirnov test
+## 
+## data:  original_ozone and imputed_only_ozone
+## D = 0.29124, p-value = 0.00992
+## alternative hypothesis: two-sided</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="datafaltante.html#cb50-1" tabindex="-1"></a><span class="co"># Prueba Wilcoxon</span></span>
+<span id="cb50-2"><a href="datafaltante.html#cb50-2" tabindex="-1"></a>wilcox_result <span class="ot">&lt;-</span> <span class="fu">wilcox.test</span>(original_ozone, imputed_only_ozone)</span>
+<span id="cb50-3"><a href="datafaltante.html#cb50-3" tabindex="-1"></a><span class="fu">print</span>(wilcox_result)</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Wilcoxon rank sum test with continuity correction
+## 
+## data:  original_ozone and imputed_only_ozone
+## W = 1796.5, p-value = 0.1369
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p>Como las pruebas realizadas, la imputación con la mediana es la mas optima, hasta el momento.</p>
+</div>
+</div>
+<div id="imputación-de-datos-con-modelos-de-regresión" class="section level2 hasAnchor" number="5.7">
+<h2><span class="header-section-number">5.7</span> Imputación de datos con modelos de regresión<a href="#imputaci%C3%B3n-de-datos-con-modelos-de-regresi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para esta parte realizaremos un modelo de regresión usando <code>random forest</code></p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="datafaltante.html#cb52-1" tabindex="-1"></a><span class="co"># Imputación múltiple con Random Forest</span></span>
+<span id="cb52-2"><a href="datafaltante.html#cb52-2" tabindex="-1"></a>imput <span class="ot">&lt;-</span> <span class="fu">mice</span>(</span>
+<span id="cb52-3"><a href="datafaltante.html#cb52-3" tabindex="-1"></a>  data,             <span class="co"># datos con NA</span></span>
+<span id="cb52-4"><a href="datafaltante.html#cb52-4" tabindex="-1"></a>  <span class="at">m =</span> <span class="dv">5</span>,            <span class="co"># número de datasets imputados</span></span>
+<span id="cb52-5"><a href="datafaltante.html#cb52-5" tabindex="-1"></a>  <span class="at">maxit =</span> <span class="dv">50</span>,       <span class="co"># iteraciones de imputación</span></span>
+<span id="cb52-6"><a href="datafaltante.html#cb52-6" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;rf&quot;</span>,    <span class="co"># método: Random Forest</span></span>
+<span id="cb52-7"><a href="datafaltante.html#cb52-7" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">500</span>,       <span class="co"># semilla para reproducibilidad</span></span>
+<span id="cb52-8"><a href="datafaltante.html#cb52-8" tabindex="-1"></a>  <span class="at">printFlag =</span> <span class="cn">FALSE</span> <span class="co"># no mostrar mensajes en consola</span></span>
+<span id="cb52-9"><a href="datafaltante.html#cb52-9" tabindex="-1"></a>)</span>
+<span id="cb52-10"><a href="datafaltante.html#cb52-10" tabindex="-1"></a></span>
+<span id="cb52-11"><a href="datafaltante.html#cb52-11" tabindex="-1"></a>imp_df2 <span class="ot">&lt;-</span> <span class="fu">complete</span>(imput)</span>
+<span id="cb52-12"><a href="datafaltante.html#cb52-12" tabindex="-1"></a><span class="fu">head</span>(imp_df2)</span></code></pre></div>
+</details>
+<pre><code>##   Ozone Solar.R Wind Temp Month Day
+## 1    41     190  7.4   67     5   1
+## 2    36     118  8.0   72     5   2
+## 3    12     149 12.6   74     5   3
+## 4    18     313 11.5   62     5   4
+## 5    21      99 14.3   56     5   5
+## 6    28     299 14.9   66     5   6</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="datafaltante.html#cb54-1" tabindex="-1"></a><span class="co"># Separar originales e imputados (Ozone)</span></span>
+<span id="cb54-2"><a href="datafaltante.html#cb54-2" tabindex="-1"></a>original_ozone <span class="ot">&lt;-</span> data<span class="sc">$</span>Ozone[<span class="sc">!</span><span class="fu">is.na</span>(data<span class="sc">$</span>Ozone)]      <span class="co"># valores originales</span></span>
+<span id="cb54-3"><a href="datafaltante.html#cb54-3" tabindex="-1"></a>imputed_only_ozone <span class="ot">&lt;-</span> imp_df2<span class="sc">$</span>Ozone[<span class="fu">is.na</span>(data<span class="sc">$</span>Ozone)] <span class="co"># solo imputados</span></span>
+<span id="cb54-4"><a href="datafaltante.html#cb54-4" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="datafaltante.html#cb54-5" tabindex="-1"></a><span class="co"># Crear un data.frame combinado</span></span>
+<span id="cb54-6"><a href="datafaltante.html#cb54-6" tabindex="-1"></a>ozone_df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb54-7"><a href="datafaltante.html#cb54-7" tabindex="-1"></a>  <span class="at">Valor =</span> <span class="fu">c</span>(original_ozone, imputed_only_ozone),</span>
+<span id="cb54-8"><a href="datafaltante.html#cb54-8" tabindex="-1"></a>  <span class="at">Tipo  =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Original&quot;</span>, <span class="fu">length</span>(original_ozone)),</span>
+<span id="cb54-9"><a href="datafaltante.html#cb54-9" tabindex="-1"></a>            <span class="fu">rep</span>(<span class="st">&quot;Imputado (Random Forest)&quot;</span>, <span class="fu">length</span>(imputed_only_ozone)))</span>
+<span id="cb54-10"><a href="datafaltante.html#cb54-10" tabindex="-1"></a>)</span>
+<span id="cb54-11"><a href="datafaltante.html#cb54-11" tabindex="-1"></a></span>
+<span id="cb54-12"><a href="datafaltante.html#cb54-12" tabindex="-1"></a><span class="co"># Gráfico de densidad</span></span>
+<span id="cb54-13"><a href="datafaltante.html#cb54-13" tabindex="-1"></a><span class="fu">ggplot</span>(ozone_df2, <span class="fu">aes</span>(<span class="at">x =</span> Valor, <span class="at">fill =</span> Tipo)) <span class="sc">+</span></span>
+<span id="cb54-14"><a href="datafaltante.html#cb54-14" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb54-15"><a href="datafaltante.html#cb54-15" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Densidad: Ozone Original vs Imputado (Random Forest)&quot;</span>,</span>
+<span id="cb54-16"><a href="datafaltante.html#cb54-16" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Ozone&quot;</span>,</span>
+<span id="cb54-17"><a href="datafaltante.html#cb54-17" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>,</span>
+<span id="cb54-18"><a href="datafaltante.html#cb54-18" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">&quot;Tipo de dato&quot;</span>) <span class="sc">+</span></span>
+<span id="cb54-19"><a href="datafaltante.html#cb54-19" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb54-20"><a href="datafaltante.html#cb54-20" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Original&quot;</span> <span class="ot">=</span> <span class="st">&quot;steelblue&quot;</span>,</span>
+<span id="cb54-21"><a href="datafaltante.html#cb54-21" tabindex="-1"></a>                               <span class="st">&quot;Imputado (Random Forest)&quot;</span> <span class="ot">=</span> <span class="st">&quot;purple&quot;</span>))</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/rf-1.png" width="672" /></p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="datafaltante.html#cb55-1" tabindex="-1"></a><span class="co"># Prueba KS</span></span>
+<span id="cb55-2"><a href="datafaltante.html#cb55-2" tabindex="-1"></a>ks_result <span class="ot">&lt;-</span> <span class="fu">ks.test</span>(original_ozone, imputed_only_ozone)</span>
+<span id="cb55-3"><a href="datafaltante.html#cb55-3" tabindex="-1"></a><span class="fu">print</span>(ks_result)</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Exact two-sample Kolmogorov-Smirnov test
+## 
+## data:  original_ozone and imputed_only_ozone
+## D = 0.099953, p-value = 0.8542
+## alternative hypothesis: two-sided</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="datafaltante.html#cb57-1" tabindex="-1"></a><span class="co"># Prueba Wilcoxon</span></span>
+<span id="cb57-2"><a href="datafaltante.html#cb57-2" tabindex="-1"></a>wilcox_result <span class="ot">&lt;-</span> <span class="fu">wilcox.test</span>(original_ozone, imputed_only_ozone)</span>
+<span id="cb57-3"><a href="datafaltante.html#cb57-3" tabindex="-1"></a><span class="fu">print</span>(wilcox_result)</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Wilcoxon rank sum test with continuity correction
+## 
+## data:  original_ozone and imputed_only_ozone
+## W = 2287, p-value = 0.5493
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p>Con todo lo realizado, podemos ver que el metodo de regresión <code>random forest</code>, nos da una mejor imputación con respecto a la mediana y el método <code>pmm</code>.</p>
+</div>
+<div id="detección-de-datos-atípicos" class="section level2 hasAnchor" number="5.8">
+<h2><span class="header-section-number">5.8</span> Detección de datos atípicos<a href="#detecci%C3%B3n-de-datos-at%C3%ADpicos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="valores-atípicos" class="section level3 hasAnchor" number="5.8.1">
+<h3><span class="header-section-number">5.8.1</span> Valores atípicos<a href="#valores-at%C3%ADpicos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Un <strong>valor atípico</strong> es una observación que se aleja considerablemente de las demás, es decir,<br />
+un <strong>punto de datos que difiere significativamente del resto</strong>.</p>
+<p>Según <em>Enderlein (1987)</em>, los valores atípicos son aquellos que se desvían tanto de las demás observaciones que podría suponerse que provienen de un <strong>mecanismo de muestreo diferente</strong>.</p>
+<div id="importancia-del-contexto" class="section level4 hasAnchor" number="5.8.1.1">
+<h4><span class="header-section-number">5.8.1.1</span> Importancia del contexto<a href="datafaltante.html#importancia-del-contexto" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Una observación debe compararse siempre con otras obtenidas <strong>bajo el mismo fenómeno</strong> antes de calificarla como atípica.</p>
+<p>Por ejemplo:<br />
+- Una persona con <strong>200 cm de altura</strong> podría considerarse un valor atípico si se compara con la población general.<br />
+- Sin embargo, <strong>no sería atípica</strong> si se compara con la población de <strong>jugadores de baloncesto</strong>.</p>
+<p>Esto ilustra que la definición de atipicidad <strong>depende del contexto</strong>.</p>
+</div>
+<div id="métodos-de-detección-en-r" class="section level4 hasAnchor" number="5.8.1.2">
+<h4><span class="header-section-number">5.8.1.2</span> Métodos de detección en R<a href="#m%C3%A9todos-de-detecci%C3%B3n-en-r" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Existen diversos enfoques para detectar valores atípicos, que van desde técnicas <strong>descriptivas</strong> hasta pruebas <strong>formales</strong>:</p>
+<ul>
+<li><strong>Técnicas sencillas</strong> (estadística descriptiva):
+<ul>
+<li>mínimo y máximo,<br />
+</li>
+<li>histograma,<br />
+</li>
+<li>boxplot,<br />
+</li>
+<li>percentiles.</li>
+</ul></li>
+<li><strong>Métodos más avanzados</strong>:
+<ul>
+<li>Filtro de <strong>Hampel</strong>,<br />
+</li>
+<li>Test de <strong>Grubbs</strong>,<br />
+</li>
+<li>Test de <strong>Dixon</strong>,<br />
+</li>
+<li>Pruebas de <strong>Rosner</strong>.</li>
+</ul></li>
+</ul>
+</div>
+<div id="consideraciones-prácticas" class="section level4 hasAnchor" number="5.8.1.3">
+<h4><span class="header-section-number">5.8.1.3</span> Consideraciones prácticas<a href="#consideraciones-pr%C3%A1cticas" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>Algunas pruebas estadísticas <strong>requieren ausencia de valores atípicos</strong> para obtener conclusiones válidas.<br />
+</li>
+<li>La <strong>eliminación de valores atípicos</strong> no siempre es recomendable: debe hacerse con <strong>precaución</strong> y justificación, pues podría eliminar información valiosa del fenómeno estudiado.</li>
+</ul>
+</div>
+</div>
+<div id="estadísticas-descriptivas" class="section level3 hasAnchor" number="5.8.2">
+<h3><span class="header-section-number">5.8.2</span> Estadísticas descriptivas<a href="#estad%C3%ADsticas-descriptivas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El primer paso para detectar valores atípicos en <strong>R</strong> es comenzar con algunos <strong>estadísticos descriptivos</strong>, en particular con el <strong>mínimo</strong> y el <strong>máximo</strong>.</p>
+<p>En <strong>R</strong>, esto puede hacerse fácilmente con la función:</p>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="datafaltante.html#cb59-1" tabindex="-1"></a>summary</span></code></pre></div>
+</details>
+<hr />
+<p>Para ilustrar el proceso, utilizaremos el dataset <code>mpg</code>, asociado al consumo de combustible de <strong>1999 a 2008</strong> para <strong>38 modelos de coches populares</strong> (ver <a href="https://ggplot2.tidyverse.org/reference/mpg.html"><code>ggplot2::mpg</code></a>).</p>
+<p>Este conjunto de datos es útil porque contiene variables numéricas de interés (como <code>hwy</code> y <code>cty</code>) en las que se pueden identificar posibles valores atípicos mediante estadísticos descriptivos.</p>
+<ol style="list-style-type: decimal">
+<li>Carguemos los datos</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="datafaltante.html#cb60-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span>mpg</span>
+<span id="cb60-2"><a href="datafaltante.html#cb60-2" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 6 × 11
+##   manufacturer model displ  year   cyl trans      drv     cty   hwy fl    class 
+##   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 audi         a4      1.8  1999     4 auto(l5)   f        18    29 p     compa…
+## 2 audi         a4      1.8  1999     4 manual(m5) f        21    29 p     compa…
+## 3 audi         a4      2    2008     4 manual(m6) f        20    31 p     compa…
+## 4 audi         a4      2    2008     4 auto(av)   f        21    30 p     compa…
+## 5 audi         a4      2.8  1999     6 auto(l5)   f        16    26 p     compa…
+## 6 audi         a4      2.8  1999     6 manual(m5) f        18    26 p     compa…</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="datafaltante.html#cb62-1" tabindex="-1"></a><span class="fu">summary</span>(dat<span class="sc">$</span>hwy)</span></code></pre></div>
+</details>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   12.00   18.00   24.00   23.44   27.00   44.00</code></pre>
+<ul>
+<li>El mínimo y el máximo son, respectivamente, el primer y el último valor de <code>hwy</code>. Como alternativa, también pueden calcularse con las funciones <code>min()</code>y <code>max()</code></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="datafaltante.html#cb64-1" tabindex="-1"></a><span class="fu">min</span>(dat<span class="sc">$</span>hwy)</span></code></pre></div>
+</details>
+<pre><code>## [1] 12</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="datafaltante.html#cb66-1" tabindex="-1"></a><span class="fu">max</span>(dat<span class="sc">$</span>hwy)</span></code></pre></div>
+</details>
+<pre><code>## [1] 44</code></pre>
+<ul>
+<li>Un claro <em>error de codificación, como un peso de 786 kg (1733 libras) para un humano</em>, ya se detectará fácilmente con esta técnica tan sencilla.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Un histograma es otra forma básica para detectar datos atípicos</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="datafaltante.html#cb68-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb68-2"><a href="datafaltante.html#cb68-2" tabindex="-1"></a></span>
+<span id="cb68-3"><a href="datafaltante.html#cb68-3" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x =</span> hwy)) <span class="sc">+</span></span>
+<span id="cb68-4"><a href="datafaltante.html#cb68-4" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb68-5"><a href="datafaltante.html#cb68-5" tabindex="-1"></a>    <span class="at">bins =</span> <span class="dv">30</span>, </span>
+<span id="cb68-6"><a href="datafaltante.html#cb68-6" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;#0c4c8a&quot;</span>, </span>
+<span id="cb68-7"><a href="datafaltante.html#cb68-7" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,     <span class="co"># bordes blancos para contraste</span></span>
+<span id="cb68-8"><a href="datafaltante.html#cb68-8" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span></span>
+<span id="cb68-9"><a href="datafaltante.html#cb68-9" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb68-10"><a href="datafaltante.html#cb68-10" tabindex="-1"></a>  <span class="fu">geom_density</span>(</span>
+<span id="cb68-11"><a href="datafaltante.html#cb68-11" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> ..count..), </span>
+<span id="cb68-12"><a href="datafaltante.html#cb68-12" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, </span>
+<span id="cb68-13"><a href="datafaltante.html#cb68-13" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb68-14"><a href="datafaltante.html#cb68-14" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.6</span></span>
+<span id="cb68-15"><a href="datafaltante.html#cb68-15" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb68-16"><a href="datafaltante.html#cb68-16" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb68-17"><a href="datafaltante.html#cb68-17" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribución de consumo en carretera (hwy)&quot;</span>,</span>
+<span id="cb68-18"><a href="datafaltante.html#cb68-18" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Datos del dataset mpg (ggplot2)&quot;</span>,</span>
+<span id="cb68-19"><a href="datafaltante.html#cb68-19" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Millas por galón en carretera&quot;</span>,</span>
+<span id="cb68-20"><a href="datafaltante.html#cb68-20" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Frecuencia&quot;</span></span>
+<span id="cb68-21"><a href="datafaltante.html#cb68-21" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb68-22"><a href="datafaltante.html#cb68-22" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb68-23"><a href="datafaltante.html#cb68-23" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb68-24"><a href="datafaltante.html#cb68-24" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb68-25"><a href="datafaltante.html#cb68-25" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">&quot;gray40&quot;</span>)</span>
+<span id="cb68-26"><a href="datafaltante.html#cb68-26" tabindex="-1"></a>  )</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/dectatip-1.png" width="672" /></p>
+<ul>
+<li>Con base en este histograma, <em>se evidencia que hay un par de observaciones más altas que todas las demás</em>.</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Además de los histogramas, <em>los boxplots también son útiles para detectar posibles valores atípicos</em>. Considere nuevamente a manera de ejemplo la columna <code>hwy</code>.</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="datafaltante.html#cb69-1" tabindex="-1"></a><span class="co"># Detectamos los outliers usando la regla del IQR</span></span>
+<span id="cb69-2"><a href="datafaltante.html#cb69-2" tabindex="-1"></a>outliers <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
+<span id="cb69-3"><a href="datafaltante.html#cb69-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span>   <span class="co"># identificador de fila</span></span>
+<span id="cb69-4"><a href="datafaltante.html#cb69-4" tabindex="-1"></a>  <span class="fu">group_by</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb69-5"><a href="datafaltante.html#cb69-5" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb69-6"><a href="datafaltante.html#cb69-6" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(hwy, <span class="fl">0.25</span>),</span>
+<span id="cb69-7"><a href="datafaltante.html#cb69-7" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(hwy, <span class="fl">0.75</span>),</span>
+<span id="cb69-8"><a href="datafaltante.html#cb69-8" tabindex="-1"></a>    <span class="at">IQR =</span> Q3 <span class="sc">-</span> Q1,</span>
+<span id="cb69-9"><a href="datafaltante.html#cb69-9" tabindex="-1"></a>    <span class="at">lower =</span> Q1 <span class="sc">-</span> <span class="fl">1.5</span> <span class="sc">*</span> IQR,</span>
+<span id="cb69-10"><a href="datafaltante.html#cb69-10" tabindex="-1"></a>    <span class="at">upper =</span> Q3 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> IQR</span>
+<span id="cb69-11"><a href="datafaltante.html#cb69-11" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb69-12"><a href="datafaltante.html#cb69-12" tabindex="-1"></a>  <span class="fu">filter</span>(hwy <span class="sc">&lt;</span> lower <span class="sc">|</span> hwy <span class="sc">&gt;</span> upper)</span>
+<span id="cb69-13"><a href="datafaltante.html#cb69-13" tabindex="-1"></a></span>
+<span id="cb69-14"><a href="datafaltante.html#cb69-14" tabindex="-1"></a><span class="co"># Boxplot con etiquetas de valores atípicos</span></span>
+<span id="cb69-15"><a href="datafaltante.html#cb69-15" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
+<span id="cb69-16"><a href="datafaltante.html#cb69-16" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#0c4c8a&quot;</span>, <span class="at">outlier.colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">outlier.shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb69-17"><a href="datafaltante.html#cb69-17" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb69-18"><a href="datafaltante.html#cb69-18" tabindex="-1"></a>    <span class="at">data =</span> outliers,</span>
+<span id="cb69-19"><a href="datafaltante.html#cb69-19" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> hwy),    <span class="co"># mostramos el valor</span></span>
+<span id="cb69-20"><a href="datafaltante.html#cb69-20" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb69-21"><a href="datafaltante.html#cb69-21" tabindex="-1"></a>    <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span></span>
+<span id="cb69-22"><a href="datafaltante.html#cb69-22" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb69-23"><a href="datafaltante.html#cb69-23" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb69-24"><a href="datafaltante.html#cb69-24" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Boxplot del consumo en carretera (hwy)&quot;</span>,</span>
+<span id="cb69-25"><a href="datafaltante.html#cb69-25" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Valores atípicos señalados y etiquetados&quot;</span>,</span>
+<span id="cb69-26"><a href="datafaltante.html#cb69-26" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb69-27"><a href="datafaltante.html#cb69-27" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Millas por galón en carretera&quot;</span></span>
+<span id="cb69-28"><a href="datafaltante.html#cb69-28" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb69-29"><a href="datafaltante.html#cb69-29" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">13</span>)</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/boxplotatopico-1.png" width="672" /></p>
+<ol start="4" style="list-style-type: decimal">
+<li>También es posible extraer los valores de los posibles valores atípicos basándose en el criterio <code>IQR</code> gracias a la función <code>boxplot.stats()$out</code>:</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="datafaltante.html#cb70-1" tabindex="-1"></a><span class="fu">boxplot.stats</span>(dat<span class="sc">$</span>hwy)<span class="sc">$</span>out</span></code></pre></div>
+</details>
+<pre><code>## [1] 44 44 41</code></pre>
+<ul>
+<li>Como puede ver, en realidad hay <em>3 puntos considerados como posibles valores atípicos</em>; 2 observaciones con un valor de 44 y 1 observación con un valor de 41. Gracias a la función <code>which()</code> es posible extraer el número de fila correspondiente a estos valores atípicos:</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="datafaltante.html#cb72-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">boxplot.stats</span>(dat<span class="sc">$</span>hwy)<span class="sc">$</span>out</span>
+<span id="cb72-2"><a href="datafaltante.html#cb72-2" tabindex="-1"></a>out_ind <span class="ot">&lt;-</span> <span class="fu">which</span>(dat<span class="sc">$</span>hwy <span class="sc">%in%</span> <span class="fu">c</span>(out))</span>
+<span id="cb72-3"><a href="datafaltante.html#cb72-3" tabindex="-1"></a>out_ind</span></code></pre></div>
+</details>
+<pre><code>## [1] 213 222 223</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Con esta información, ahora puede <em>volver fácilmente a las filas específicas del conjunto de datos para verificarlas</em>, o imprimir todas las variables para estos valores atípicos:</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="datafaltante.html#cb74-1" tabindex="-1"></a>dat[out_ind, ]</span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 3 × 11
+##   manufacturer model      displ  year   cyl trans  drv     cty   hwy fl    class
+##   &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+## 1 volkswagen   jetta        1.9  1999     4 manua… f        33    44 d     comp…
+## 2 volkswagen   new beetle   1.9  1999     4 manua… f        35    44 d     subc…
+## 3 volkswagen   new beetle   1.9  1999     4 auto(… f        29    41 d     subc…</code></pre>
+</div>
+<div id="percentiles" class="section level3 hasAnchor" number="5.8.3">
+<h3><span class="header-section-number">5.8.3</span> Percentiles<a href="datafaltante.html#percentiles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Este método de <strong>detección de valores atípicos se basa en los percentiles</strong>. Con este enfoque, todas las <strong>observaciones que se encuentren fuera del intervalo formado por los percentiles 2.5 y 97.5</strong> se considerarán como <strong>posibles valores atípicos</strong>:</p>
+<p><span class="math display">\[
+I_{out} = \left[ q_{0.025}, \; q_{0.975} \right]^C
+\]</span></p>
+<ul>
+<li><p>También pueden considerarse <strong>otros percentiles</strong> (por ejemplo, el 1 y el 99, o el 5 y el 95) para construir el intervalo.</p></li>
+<li><p>Los valores de los percentiles inferior y superior (y, por lo tanto, los <strong>límites inferior y superior del intervalo</strong>) pueden calcularse con la función <code>quantile()</code> en <strong>R</strong>.</p></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="datafaltante.html#cb76-1" tabindex="-1"></a>bounds <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
+<span id="cb76-2"><a href="datafaltante.html#cb76-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb76-3"><a href="datafaltante.html#cb76-3" tabindex="-1"></a>    <span class="at">lower_bound =</span> <span class="fu">quantile</span>(hwy, <span class="fl">0.025</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb76-4"><a href="datafaltante.html#cb76-4" tabindex="-1"></a>    <span class="at">upper_bound =</span> <span class="fu">quantile</span>(hwy, <span class="fl">0.975</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb76-5"><a href="datafaltante.html#cb76-5" tabindex="-1"></a>  )</span>
+<span id="cb76-6"><a href="datafaltante.html#cb76-6" tabindex="-1"></a></span>
+<span id="cb76-7"><a href="datafaltante.html#cb76-7" tabindex="-1"></a>bounds</span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 1 × 2
+##   lower_bound upper_bound
+##         &lt;dbl&gt;       &lt;dbl&gt;
+## 1          14        35.2</code></pre>
+<ul>
+<li>Según este método, todas las observaciones por debajo de <span class="math inline">\(14\)</span> y por encima de <span class="math inline">\(35.175\)</span> se considerarán posibles valores atípicos. Los números de fila de las observaciones fuera del intervalo pueden extraerse de la siguiente manera</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="datafaltante.html#cb78-1" tabindex="-1"></a>outlier_ind <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
+<span id="cb78-2"><a href="datafaltante.html#cb78-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row_id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb78-3"><a href="datafaltante.html#cb78-3" tabindex="-1"></a>  <span class="fu">filter</span>(hwy <span class="sc">&lt;</span> bounds<span class="sc">$</span>lower_bound <span class="sc">|</span> hwy <span class="sc">&gt;</span> bounds<span class="sc">$</span>upper_bound) <span class="sc">%&gt;%</span></span>
+<span id="cb78-4"><a href="datafaltante.html#cb78-4" tabindex="-1"></a>  <span class="fu">pull</span>(row_id)</span>
+<span id="cb78-5"><a href="datafaltante.html#cb78-5" tabindex="-1"></a></span>
+<span id="cb78-6"><a href="datafaltante.html#cb78-6" tabindex="-1"></a>outlier_ind</span></code></pre></div>
+</details>
+<pre><code>##  [1]  55  60  66  70 106 107 127 197 213 222 223</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="datafaltante.html#cb80-1" tabindex="-1"></a>dat[outlier_ind, <span class="st">&quot;hwy&quot;</span>]</span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 11 × 1
+##      hwy
+##    &lt;int&gt;
+##  1    12
+##  2    12
+##  3    12
+##  4    12
+##  5    36
+##  6    36
+##  7    12
+##  8    37
+##  9    44
+## 10    44
+## 11    41</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="datafaltante.html#cb82-1" tabindex="-1"></a>dat[outlier_ind, ]</span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 11 × 11
+##    manufacturer model      displ  year   cyl trans drv     cty   hwy fl    class
+##    &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 dodge        dakota pi…   4.7  2008     8 auto… 4         9    12 e     pick…
+##  2 dodge        durango 4…   4.7  2008     8 auto… 4         9    12 e     suv  
+##  3 dodge        ram 1500 …   4.7  2008     8 auto… 4         9    12 e     pick…
+##  4 dodge        ram 1500 …   4.7  2008     8 manu… 4         9    12 e     pick…
+##  5 honda        civic        1.8  2008     4 auto… f        25    36 r     subc…
+##  6 honda        civic        1.8  2008     4 auto… f        24    36 c     subc…
+##  7 jeep         grand che…   4.7  2008     8 auto… 4         9    12 e     suv  
+##  8 toyota       corolla      1.8  2008     4 manu… f        28    37 r     comp…
+##  9 volkswagen   jetta        1.9  1999     4 manu… f        33    44 d     comp…
+## 10 volkswagen   new beetle   1.9  1999     4 manu… f        35    44 d     subc…
+## 11 volkswagen   new beetle   1.9  1999     4 auto… f        29    41 d     subc…</code></pre>
+<ul>
+<li>Hay 11 valores atípicos potenciales según el método de los percentiles. Para reducir este número, puede establecer los percentiles en 1 y 99:</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="datafaltante.html#cb84-1" tabindex="-1"></a>bounds <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
+<span id="cb84-2"><a href="datafaltante.html#cb84-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb84-3"><a href="datafaltante.html#cb84-3" tabindex="-1"></a>    <span class="at">lower_bound =</span> <span class="fu">quantile</span>(hwy, <span class="fl">0.01</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb84-4"><a href="datafaltante.html#cb84-4" tabindex="-1"></a>    <span class="at">upper_bound =</span> <span class="fu">quantile</span>(hwy, <span class="fl">0.99</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb84-5"><a href="datafaltante.html#cb84-5" tabindex="-1"></a>  )</span>
+<span id="cb84-6"><a href="datafaltante.html#cb84-6" tabindex="-1"></a></span>
+<span id="cb84-7"><a href="datafaltante.html#cb84-7" tabindex="-1"></a>outlier_ind <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
+<span id="cb84-8"><a href="datafaltante.html#cb84-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row_id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb84-9"><a href="datafaltante.html#cb84-9" tabindex="-1"></a>  <span class="fu">filter</span>(hwy <span class="sc">&lt;</span> bounds<span class="sc">$</span>lower_bound <span class="sc">|</span> hwy <span class="sc">&gt;</span> bounds<span class="sc">$</span>upper_bound) <span class="sc">%&gt;%</span></span>
+<span id="cb84-10"><a href="datafaltante.html#cb84-10" tabindex="-1"></a>  <span class="fu">pull</span>(row_id)</span>
+<span id="cb84-11"><a href="datafaltante.html#cb84-11" tabindex="-1"></a></span>
+<span id="cb84-12"><a href="datafaltante.html#cb84-12" tabindex="-1"></a>dat[outlier_ind,]</span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 3 × 11
+##   manufacturer model      displ  year   cyl trans  drv     cty   hwy fl    class
+##   &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+## 1 volkswagen   jetta        1.9  1999     4 manua… f        33    44 d     comp…
+## 2 volkswagen   new beetle   1.9  1999     4 manua… f        35    44 d     subc…
+## 3 volkswagen   new beetle   1.9  1999     4 auto(… f        29    41 d     subc…</code></pre>
+</div>
+<div id="filtro-de-hampel" class="section level3 hasAnchor" number="5.8.4">
+<h3><span class="header-section-number">5.8.4</span> Filtro de Hampel<a href="datafaltante.html#filtro-de-hampel" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Otro método, conocido como <strong>filtro de Hampel</strong>, consiste en considerar como valores atípicos aquellos <strong>valores que se encuentran fuera del intervalo formado por la mediana, más o menos 3 desviaciones absolutas de la mediana (MAD)</strong>:</p>
+<p><span class="math display">\[
+I = [ \tilde{X} - 3 \cdot MAD, \ \tilde{X} + 3 \cdot MAD ]
+\]</span></p>
+<p>donde</p>
+<ul>
+<li><strong>MAD</strong> es la <em>desviación absoluta de la mediana</em>.<br />
+</li>
+<li>Se define como la mediana de las desviaciones absolutas respecto a la mediana:</li>
+</ul>
+<p><span class="math display">\[
+MAD = k \cdot \text{median} \left( |X_i - \tilde{X}| \right)
+\]</span></p>
+<p>Aquí, <span class="math inline">\(\tilde{X} = \text{median}(X)\)</span> es la mediana de los datos.
+- El parámetro <span class="math inline">\(k\)</span> corresponde al <strong>factor de escala</strong>, que por defecto en <code>R</code> se toma como <span class="math inline">\(k = 1\)</span>.</p>
+<ul>
+<li>Para aplicar este método en <strong>R</strong>, primero se establecen los <strong>límites del intervalo</strong> con las funciones <code>median()</code> y <code>mad()</code>. Los valores que se encuentren fuera de este rango se consideran <strong>atípicos</strong>.</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="datafaltante.html#cb86-1" tabindex="-1"></a><span class="co"># Calcular límites inferior y superior con tidyverse</span></span>
+<span id="cb86-2"><a href="datafaltante.html#cb86-2" tabindex="-1"></a>hampel_bounds <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
+<span id="cb86-3"><a href="datafaltante.html#cb86-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">lower_bound =</span> <span class="fu">median</span>(hwy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="dv">3</span> <span class="sc">*</span> <span class="fu">mad</span>(hwy, <span class="at">constant =</span> <span class="dv">1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb86-4"><a href="datafaltante.html#cb86-4" tabindex="-1"></a>    <span class="at">upper_bound =</span> <span class="fu">median</span>(hwy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> <span class="fu">mad</span>(hwy, <span class="at">constant =</span> <span class="dv">1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb86-5"><a href="datafaltante.html#cb86-5" tabindex="-1"></a></span>
+<span id="cb86-6"><a href="datafaltante.html#cb86-6" tabindex="-1"></a>hampel_bounds</span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 1 × 2
+##   lower_bound upper_bound
+##         &lt;dbl&gt;       &lt;dbl&gt;
+## 1           9          39</code></pre>
+<ul>
+<li>Según este método, <em>todas las observaciones por debajo de 9 y por encima de 39 se considerarán como posibles valores atípicos</em>. Los números de fila de las observaciones que están fuera del intervalo pueden entonces extraerse de la siguiente manera</li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="datafaltante.html#cb88-1" tabindex="-1"></a><span class="co"># Extraer los índices y registros atípicos</span></span>
+<span id="cb88-2"><a href="datafaltante.html#cb88-2" tabindex="-1"></a>outliers <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
+<span id="cb88-3"><a href="datafaltante.html#cb88-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row_id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb88-4"><a href="datafaltante.html#cb88-4" tabindex="-1"></a>  <span class="fu">filter</span>(hwy <span class="sc">&lt;</span> hampel_bounds<span class="sc">$</span>lower_bound <span class="sc">|</span> hwy <span class="sc">&gt;</span> hampel_bounds<span class="sc">$</span>upper_bound)<span class="sc">%&gt;%</span></span>
+<span id="cb88-5"><a href="datafaltante.html#cb88-5" tabindex="-1"></a>  <span class="fu">pull</span>(row_id)</span>
+<span id="cb88-6"><a href="datafaltante.html#cb88-6" tabindex="-1"></a></span>
+<span id="cb88-7"><a href="datafaltante.html#cb88-7" tabindex="-1"></a>outliers</span></code></pre></div>
+</details>
+<pre><code>## [1] 213 222 223</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="datafaltante.html#cb90-1" tabindex="-1"></a>dat[outliers,]</span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 3 × 11
+##   manufacturer model      displ  year   cyl trans  drv     cty   hwy fl    class
+##   &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+## 1 volkswagen   jetta        1.9  1999     4 manua… f        33    44 d     comp…
+## 2 volkswagen   new beetle   1.9  1999     4 manua… f        35    44 d     subc…
+## 3 volkswagen   new beetle   1.9  1999     4 auto(… f        29    41 d     subc…</code></pre>
+</div>
+<div id="prueba-de-grubbs" class="section level3 hasAnchor" number="5.8.5">
+<h3><span class="header-section-number">5.8.5</span> Prueba de Grubbs<a href="datafaltante.html#prueba-de-grubbs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La prueba de <code>Grubbs</code> permite <strong>detectar si el valor más alto o más bajo de un conjunto de datos es un valor atípico</strong>. Este test analiza un valor atípico a la vez (ya sea el valor máximo o el mínimo), y por ello las hipótesis nula y alternativa se formulan así:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: El valor más alto/bajo <strong>no es un valor atípico</strong>.<br />
+</li>
+<li><span class="math inline">\(H_1\)</span>: El valor más alto/bajo <strong>es un valor atípico</strong>.</li>
+</ul>
+<p>La interpretación sería</p>
+<ul>
+<li>Si el valor <em>p</em> es inferior al nivel de significancia elegido (generalmente <span class="math inline">\(\alpha = 0.05\)</span>), se <strong>rechaza <span class="math inline">\(H_0\)</span></strong> y se concluye que el valor más bajo o más alto es un valor atípico.<br />
+</li>
+<li>Si el valor <em>p</em> es mayor o igual a <span class="math inline">\(\alpha\)</span>, <strong>no se rechaza <span class="math inline">\(H_0\)</span></strong>, lo que significa que el valor extremo no puede considerarse un atípico.</li>
+</ul>
+<div class="admon-box observacion">
+<div class="admon-title">
+<span class="icon"></span> Importante
+</div>
+<p>
+la prueba de <code>Grubbs</code> <strong>no es apropiada para tamaños de muestra <span class="math inline">\(n \leq 6\)</span></strong>
+</p>
+</div>
+<ol style="list-style-type: decimal">
+<li><p>Para realizar la prueba de Grubbs en <code>R</code>, utilizamos la función <code>grubbs.test()</code> del paquete <strong>outliers</strong>. La función recibe distintos argumentos, entre ellos el parámetro <code>type</code>:</p>
+<ul>
+<li><code>type = 10</code>: prueba si el valor máximo es un valor atípico.</li>
+<li><code>type = 11</code>: prueba si tanto el mínimo como el máximo son valores atípicos.</li>
+<li><code>type = 20</code>: prueba si hay dos valores atípicos en una cola.</li>
+</ul></li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="datafaltante.html#cb92-1" tabindex="-1"></a><span class="fu">library</span>(outliers)</span>
+<span id="cb92-2"><a href="datafaltante.html#cb92-2" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">grubbs.test</span>(dat<span class="sc">$</span>hwy)</span>
+<span id="cb92-3"><a href="datafaltante.html#cb92-3" tabindex="-1"></a>test</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Grubbs test for one outlier
+## 
+## data:  dat$hwy
+## G = 3.45274, U = 0.94862, p-value = 0.05555
+## alternative hypothesis: highest value 44 is an outlier</code></pre>
+<ul>
+<li><p>El valor <em>p</em> obtenido es aproximadamente <strong>0.056</strong>. Al nivel de significación del 5% (<span class="math inline">\(\alpha = 0.05\)</span>), <strong>no rechazamos la hipótesis nula</strong> de que el valor más alto (44) <strong>no es un valor atípico</strong>.</p>
+<blockquote>
+<p>En otras palabras, <strong>no tenemos evidencia suficiente para afirmar que 44 es un valor atípico</strong>.</p>
+</blockquote></li>
+<li><p>Por defecto, la prueba se realiza sobre el <strong>valor más alto</strong> (como se muestra en la salida de <code>R</code>). La hipótesis alternativa sería: <em>el valor más alto (44) es un valor atípico</em>.</p></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Si se desea realizar la prueba para el <strong>valor más bajo</strong>, basta con añadir el argumento:</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="datafaltante.html#cb94-1" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">grubbs.test</span>(dat<span class="sc">$</span>hwy, <span class="at">opposite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb94-2"><a href="datafaltante.html#cb94-2" tabindex="-1"></a>test</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Grubbs test for one outlier
+## 
+## data:  dat$hwy
+## G = 1.92122, U = 0.98409, p-value = 1
+## alternative hypothesis: lowest value 12 is an outlier</code></pre>
+<ul>
+<li>El valor <span class="math inline">\(p\)</span> es 1. Al nivel de significación del <span class="math inline">\(5\%\)</span>, <strong>no rechazamos la hipótesis de que el valor más bajo 12 no es un valor atípico</strong>.</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>A modo de ilustración, <strong>sustituiremos ahora una observación por un valor más extremo y realizaremos la prueba</strong> de <code>Grubbs</code> en este nuevo conjunto de datos. Reemplacemos el <span class="math inline">\(34^{th}\)</span> por un valor de 212</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="datafaltante.html#cb96-1" tabindex="-1"></a>dat[<span class="dv">34</span>, <span class="st">&quot;hwy&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">212</span></span>
+<span id="cb96-2"><a href="datafaltante.html#cb96-2" tabindex="-1"></a></span>
+<span id="cb96-3"><a href="datafaltante.html#cb96-3" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">grubbs.test</span>(dat<span class="sc">$</span>hwy)</span>
+<span id="cb96-4"><a href="datafaltante.html#cb96-4" tabindex="-1"></a>test</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Grubbs test for one outlier
+## 
+## data:  dat$hwy
+## G = 13.72240, U = 0.18836, p-value &lt; 2.2e-16
+## alternative hypothesis: highest value 212 is an outlier</code></pre>
+<p>El valor <span class="math inline">\(p\)</span> es menor que la significancia. <strong>Al nivel de significancia del 5%, concluimos que el valor más alto 212 es un valor atípico</strong>.</p>
+</div>
+<div id="prueba-de-dixon" class="section level3 hasAnchor" number="5.8.6">
+<h3><span class="header-section-number">5.8.6</span> Prueba de Dixon<a href="datafaltante.html#prueba-de-dixon" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Al igual que la prueba de <strong>Grubbs</strong>, la prueba de <strong>Dixon</strong> se utiliza para <strong>comprobar si un único valor bajo o alto es un valor atípico</strong>. Por lo tanto, si se sospecha que hay más de un valor atípico, <strong>la prueba debe realizarse en cada valor atípico sospechoso de forma individual</strong>.</p>
+<p>La prueba de <strong>Dixon</strong> es especialmente <strong>útil para muestras de pequeño tamaño</strong> (generalmente <span class="math inline">\(n \leq 25\)</span>).</p>
+<p>Para realizar la prueba de Dixon en <code>R</code>, se utiliza la función <code>dixon.test()</code> del paquete <strong>outliers</strong>. Sin embargo, es importante destacar que:</p>
+<ul>
+<li>La prueba <strong>sólo puede aplicarse a conjuntos de datos pequeños</strong>.<br />
+</li>
+<li><strong>R</strong> restringe su aplicación a <strong>conjuntos de entre 3 y 30 observaciones</strong>.</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>En este ejemplo, limitamos el análisis a las <strong>20 primeras observaciones</strong> del conjunto de datos.</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="datafaltante.html#cb98-1" tabindex="-1"></a>subdat <span class="ot">&lt;-</span> dat[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, ]</span>
+<span id="cb98-2"><a href="datafaltante.html#cb98-2" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">dixon.test</span>(subdat<span class="sc">$</span>hwy)</span>
+<span id="cb98-3"><a href="datafaltante.html#cb98-3" tabindex="-1"></a>test</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Dixon test for outliers
+## 
+## data:  subdat$hwy
+## Q = 0.57143, p-value = 0.006508
+## alternative hypothesis: lowest value 15 is an outlier</code></pre>
+<ul>
+<li>Los resultados muestran que el <strong>valor más bajo, 15, es un valor atípico</strong>, con valor <span class="math inline">\(p\)</span> menor que la significancia del <span class="math inline">\(5\%\)</span>.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Para comprobar el valor más alto, basta con añadir el argumento <code>opuesto = TRUE</code> a la función <code>dixon.test()</code>.</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="datafaltante.html#cb100-1" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">dixon.test</span>(subdat<span class="sc">$</span>hwy, <span class="at">opposite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb100-2"><a href="datafaltante.html#cb100-2" tabindex="-1"></a>test</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Dixon test for outliers
+## 
+## data:  subdat$hwy
+## Q = 0.25, p-value = 0.8582
+## alternative hypothesis: highest value 31 is an outlier</code></pre>
+<ul>
+<li>Los resultados muestran que el valor más alto 31 no es un valor atípico (<span class="math inline">\(p-valor = 0.8582\)</span>).</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Es una buena práctica comprobar siempre los resultados de la prueba estadística de valores atípicos con el diagrama de caja para asegurarse de que hemos comprobado todos los valores atípicos potenciales</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="datafaltante.html#cb102-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">boxplot.stats</span>(subdat<span class="sc">$</span>hwy)<span class="sc">$</span>out</span>
+<span id="cb102-2"><a href="datafaltante.html#cb102-2" tabindex="-1"></a><span class="fu">boxplot</span>(subdat<span class="sc">$</span>hwy, <span class="at">ylab =</span> <span class="st">&quot;hwy&quot;</span>)</span>
+<span id="cb102-3"><a href="datafaltante.html#cb102-3" tabindex="-1"></a><span class="fu">mtext</span>(<span class="fu">paste</span>(<span class="st">&quot;Outliers: &quot;</span>, <span class="fu">paste</span>(out, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)))</span></code></pre></div>
+</details>
+<p><img src="bookdown-demo_files/figure-html/dixon4-1.png" width="672" /></p>
+<ul>
+<li>A partir del <code>boxplot</code>, vemos que también podríamos aplicar la prueba de <strong><code>Dixon</code> sobre el valor 20 además del valor 15 realizado anteriormente</strong>.</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>Esto puede hacerse encontrando el número de fila del valor mínimo, excluyendo este número de fila del conjunto de datos y aplicando finalmente la prueba de <code>Dixon</code> a este nuevo conjunto de datos</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="datafaltante.html#cb103-1" tabindex="-1"></a>remove_ind <span class="ot">&lt;-</span> <span class="fu">which.min</span>(subdat<span class="sc">$</span>hwy)</span>
+<span id="cb103-2"><a href="datafaltante.html#cb103-2" tabindex="-1"></a>subsubdat <span class="ot">&lt;-</span> subdat[<span class="sc">-</span>remove_ind, ]</span>
+<span id="cb103-3"><a href="datafaltante.html#cb103-3" tabindex="-1"></a><span class="fu">tail</span>(subsubdat)</span></code></pre></div>
+</details>
+<pre><code>## # A tibble: 6 × 11
+##   manufacturer model       displ  year   cyl trans drv     cty   hwy fl    class
+##   &lt;chr&gt;        &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+## 1 audi         a4 quattro    3.1  2008     6 auto… 4        17    25 p     comp…
+## 2 audi         a4 quattro    3.1  2008     6 manu… 4        15    25 p     comp…
+## 3 audi         a6 quattro    2.8  1999     6 auto… 4        15    24 p     mids…
+## 4 audi         a6 quattro    3.1  2008     6 auto… 4        17    25 p     mids…
+## 5 audi         a6 quattro    4.2  2008     8 auto… 4        16    23 p     mids…
+## 6 chevrolet    c1500 subu…   5.3  2008     8 auto… r        14    20 r     suv</code></pre>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="datafaltante.html#cb105-1" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">dixon.test</span>(subsubdat<span class="sc">$</span>hwy)</span>
+<span id="cb105-2"><a href="datafaltante.html#cb105-2" tabindex="-1"></a>test</span></code></pre></div>
+</details>
+<pre><code>## 
+##  Dixon test for outliers
+## 
+## data:  subsubdat$hwy
+## Q = 0.44444, p-value = 0.1297
+## alternative hypothesis: lowest value 20 is an outlier</code></pre>
+<ul>
+<li>Los resultados muestran que el segundo valor más bajo, <span class="math inline">\(20\)</span>, no es un valor atípico (<span class="math inline">\(p-valor = 0.13\)</span>)</li>
+</ul>
+</div>
+<div id="prueba-de-rosner" class="section level3 hasAnchor" number="5.8.7">
+<h3><span class="header-section-number">5.8.7</span> Prueba de Rosner<a href="datafaltante.html#prueba-de-rosner" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La prueba de <code>Rosner</code> para detectar valores atípicos tiene las siguientes ventajas. <strong>Se utiliza para detectar varios valores atípicos a la vez</strong> (a diferencia de la prueba de <code>Grubbs</code> y <code>Dixon</code>, que debe realizarse de forma iterativa para detectar múltiples valores atípicos), y está diseñado para evitar el problema del enmascaramiento, en el que un valor atípico cercano a otro atípico puede pasar desapercibido. A diferencia de la prueba de <code>Dixon</code>, hay que tener en cuenta que la prueba de <code>Rosner</code> es <strong>más apropiada cuando el tamaño de la muestra es grande</strong> (<span class="math inline">\(n\geq 20\)</span>). Por tanto, volvemos a utilizar el conjunto de datos inicial dat, que incluye 234 observaciones.</p>
+<ol style="list-style-type: decimal">
+<li>Para realizar la prueba de <code>Rosner</code> utilizamos la función <code>rosnerTest()</code> del paquete <code>EnvStats</code>. Esta función requiere al menos 2 argumentos: <strong>los datos y el número de presuntos valores atípicos</strong> <code>k</code> (con <code>k = 3</code> como <strong>número de presuntos valores atípicos por defecto</strong>). Para este ejemplo, establecemos que el número de presuntos valores atípicos sea igual a 3, tal y como sugiere el número de posibles valores atípicos esbozado en el <strong>boxplot</strong> al principio del artículo.</li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="datafaltante.html#cb107-1" tabindex="-1"></a><span class="fu">library</span>(EnvStats)</span>
+<span id="cb107-2"><a href="datafaltante.html#cb107-2" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">rosnerTest</span>(dat<span class="sc">$</span>hwy, <span class="at">k =</span> <span class="dv">3</span>)</span></code></pre></div>
+</details>
+<ol start="2" style="list-style-type: decimal">
+<li>Los resultados interesantes se ofrecen en la tabla <code>all.stats</code></li>
+</ol>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="datafaltante.html#cb108-1" tabindex="-1"></a>test<span class="sc">$</span>all.stats</span></code></pre></div>
+</details>
+<pre><code>##   i   Mean.i      SD.i Value Obs.Num     R.i+1 lambda.i+1 Outlier
+## 1 0 24.21795 13.684345   212      34 13.722399   3.652091    TRUE
+## 2 1 23.41202  5.951835    44     213  3.459098   3.650836   FALSE
+## 3 2 23.32328  5.808172    44     222  3.559936   3.649575   FALSE</code></pre>
+<ul>
+<li>Basándonos en la prueba de <code>Rosner</code>, vemos que sólo hay un valor atípico (véase la columna de valores atípicos), y que es la observación <span class="math inline">\(34\)</span> (véase <code>Obs.Num</code>) con un valor de <span class="math inline">\(212\)</span> (véase <code>Value</code>).</li>
+</ul>
+</div>
+</div>
+<div id="tratamiento-de-datos-atípicos" class="section level2 hasAnchor" number="5.9">
+<h2><span class="header-section-number">5.9</span> Tratamiento de datos atípicos<a href="#tratamiento-de-datos-at%C3%ADpicos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Una vez identificados los valores atípicos y habiendo decidido enmendar la situación según la naturaleza del problema, puede considerar uno de los siguientes enfoques.</p>
+<ul>
+<li><p><strong>Imputación</strong>: Este método se ha tratado en detalle en la discusión sobre el tratamiento de los valores faltantes.</p></li>
+<li><p><strong>Capping</strong>: Para los valores que se encuentran fuera de los límites de <span class="math inline">\(1.5 \cdot IQR\)</span> podríamos poner un tope sustituyendo las observaciones que se encuentran fuera del límite inferior por el valor del <span class="math inline">\(5^{th}\)</span> percentíl y las que se encuentran por encima del límite superior, por el valor del <span class="math inline">\(95^{th}\)</span> percentíl. A continuación se muestra un código de ejemplo que logra esto</p></li>
+</ul>
+<details class=chunk-details open><summary class=chunk-summary><span class=chunk-summary-text>Code</span></summary>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="datafaltante.html#cb110-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> dat<span class="sc">$</span>hwy</span>
+<span id="cb110-2"><a href="datafaltante.html#cb110-2" tabindex="-1"></a>qnt <span class="ot">&lt;-</span> <span class="fu">quantile</span>(x, <span class="at">probs=</span><span class="fu">c</span>(.<span class="dv">25</span>, .<span class="dv">75</span>), <span class="at">na.rm =</span> T)  <span class="co">#Quartiles</span></span>
+<span id="cb110-3"><a href="datafaltante.html#cb110-3" tabindex="-1"></a>caps <span class="ot">&lt;-</span> <span class="fu">quantile</span>(x, <span class="at">probs=</span><span class="fu">c</span>(.<span class="dv">05</span>, .<span class="dv">95</span>), <span class="at">na.rm =</span> T) <span class="co">#5th,95th Percentiles</span></span>
+<span id="cb110-4"><a href="datafaltante.html#cb110-4" tabindex="-1"></a></span>
+<span id="cb110-5"><a href="datafaltante.html#cb110-5" tabindex="-1"></a>H <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">*</span> <span class="fu">IQR</span>(x, <span class="at">na.rm =</span> T)</span>
+<span id="cb110-6"><a href="datafaltante.html#cb110-6" tabindex="-1"></a>x[x <span class="sc">&lt;</span> (qnt[<span class="dv">1</span>] <span class="sc">-</span> H)] <span class="ot">&lt;-</span> caps[<span class="dv">1</span>]</span>
+<span id="cb110-7"><a href="datafaltante.html#cb110-7" tabindex="-1"></a>x[x <span class="sc">&gt;</span> (qnt[<span class="dv">2</span>] <span class="sc">+</span> H)] <span class="ot">&lt;-</span> caps[<span class="dv">2</span>]</span>
+<span id="cb110-8"><a href="datafaltante.html#cb110-8" tabindex="-1"></a><span class="fu">head</span>(x)</span></code></pre></div>
+</details>
+<pre><code>## [1] 29 29 31 30 26 26</code></pre>
+<div class="admon-box nota">
+<div class="admon-title">
+<span class="icon"></span> Predicción
+</div>
+<p>
+En otro enfoque, los <strong>valores atípicos pueden sustituirse por valores faltantes (<code>NA</code>) y luego pueden predecirse considerándolos como una variable de respuesta</strong>. Ya hemos hablado de cómo predecir los valores faltantes en la sección anterior.
+</p>
+</div>
+<div class="admon-box ejercicio">
+<div class="admon-title">
+<span class="icon"></span> Ejercicio
+</div>
+<ol>
+<li>
+Realice un EDA para el conjunto de datos
+(<a href="https://raw.githubusercontent.com/cdeoroaguado/Datos/refs/heads/main/dataviz/diabetes.csv">Diabetes Dataset</a>).
+Este dataset consta de variables médicas predictoras (independientes) y una variable objetivo (dependiente: resultado).<br />
+Sustituya todos los valores nulos “ausentes” por <code>NA</code> y realice el respectivo análisis de datos faltantes.
+</li>
+<li>
+Exprese en <strong>R</strong> el siguiente código escrito en Python que sustituye los ceros por <code>NA</code>:<br />
+
+<pre><code class="language-python">
+df.loc[df["Glucose"] == 0.0, "Glucose"] = np.NAN
+df.loc[df["BloodPressure"] == 0.0, "BloodPressure"] = np.NAN
+df.loc[df["SkinThickness"] == 0.0, "SkinThickness"] = np.NAN
+df.loc[df["Insulin"] == 0.0, "Insulin"] = np.NAN
+df.loc[df["BMI"] == 0.0, "BMI"] = np.NAN
+      </code></pre>
+</li>
+<li>
+Aplique imputación de datos usando el paquete <code>mice</code> en R con los siguientes métodos:<br />
+
+<ul>
+<li>
+<code>method = “pmm”</code>
+</li>
+<li>
+<code>method = “norm.predict”</code>
+</li>
+<li>
+<code>method = “norm.nob”</code>
+</li>
+<li>
+<code>method = “norm”</code>
+</li>
+</ul>
+</li>
+<li>
+Identifique valores atípicos en cada variable del dataset utilizando técnicas estadísticas vistas en clase
+(Imputación/Capping/Predicción, test de Rosner, Dixon, Grubbs, Hampel, Percentiles, Boxplots, Histogramas y Descriptivos).<br />
+Finalmente, realice imputación de los datos atípicos con base en lo desarrollado en el ítem anterior.
+</li>
+</ol>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ggmap.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="referencias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/05-datafaltante.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
