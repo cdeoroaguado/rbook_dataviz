@@ -126,3 +126,6 @@ ejercicios-practicos
 desafío-1-fácil-dale-tu-estilo
 desafío-2-intermedio-pacientes-de-ejemplo
 desafío-3-avanzado-guarda-tu-modelo
+fig:vizplotly-19
+fig:vizplotly-20
+fig:vizplotly-21
